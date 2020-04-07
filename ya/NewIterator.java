@@ -1,7 +1,6 @@
 import java.util.*;
 
 /**
- *
  * Created by asavan on 02.12.2016.
  */
 
@@ -40,7 +39,6 @@ class NewIterator<T> {
     }
 
 
-
     // ["eat", "tea", "tan", "ate", "nat", "bat"]
 /* [
   ["ate", "eat","tea"],
@@ -52,24 +50,18 @@ class NewIterator<T> {
         Map<Print, List<String>> map = new LinkedHashMap<>();
         for (String str : strs) {
             Print p = new Print(str);
-            List<String> strings = map.get(p);
-            if (strings == null) {
-                List<String> newList = new ArrayList<>();
-                newList.add(str);
-                map.put(p, newList);
-            } else {
-                strings.add(str);
-            }
+            map.computeIfAbsent(p, k -> new ArrayList<>()).add(str);
         }
 
         return map.values();
     }
 
     private static class Print {
+        private static final int ALPHABET_SIZE = 26;
         private int[] array;
 
         Print(String word) {
-            array = new int[26];
+            array = new int[ALPHABET_SIZE];
             for (char c : word.toCharArray()) {
                 array[c - 'a'] += 1;
             }
@@ -90,8 +82,8 @@ class NewIterator<T> {
         public boolean equals(Object other) {
             if (other == null) return false;
             if (!(other instanceof Print)) return false;
-            for (int i = 0; i < 26; ++i) {
-                if (this.array[i] != ((Print)other).array[i]) {
+            for (int i = 0; i < ALPHABET_SIZE; ++i) {
+                if (this.array[i] != ((Print) other).array[i]) {
                     return false;
                 }
             }
@@ -105,7 +97,3 @@ class NewIterator<T> {
         System.out.print(lists);
     }
 }
-
-
-
-

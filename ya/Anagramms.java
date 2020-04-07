@@ -9,9 +9,10 @@ public class Anagramms {
 
     private static class Print {
         private int[] array;
+        private static final int ALPHABET_SIZE = 26;
 
         Print(String word) {
-            array = new int[26];
+            array = new int[ALPHABET_SIZE];
             for (char c : word.toCharArray()) {
                 array[c - 'a'] += 1;
             }
@@ -32,8 +33,8 @@ public class Anagramms {
         public boolean equals(Object other) {
             if (other == null) return false;
             if (!(other instanceof Print)) return false;
-            for (int i = 0; i < 26; ++i) {
-                if (this.array[i] != ((Print)other).array[i]) {
+            for (int i = 0; i < ALPHABET_SIZE; ++i) {
+                if (this.array[i] != ((Print) other).array[i]) {
                     return false;
                 }
             }
