@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(determinant)
 
-set(SOURCES main.cpp solve_array.cpp solve_vector.cpp solve_c_array.cpp)
+set(SOURCES main.cpp solve_array.cpp solve_vector.cpp solve_c_array.cpp solve_permutation.cpp)
 
 add_executable(determinant ${SOURCES})
 set_property(TARGET determinant PROPERTY CXX_STANDARD 20)
