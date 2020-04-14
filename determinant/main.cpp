@@ -37,6 +37,13 @@ inline bool is_first(int d) {
     return ((SIZE_SQR - d) % 2) == 0;
 }
 
+void printResult(int d, int k, int position_res, int first)
+{
+    if (d == SIZE_SQR) {
+        std::cout << k + 1 << " " << position_res << std::endl;
+    }
+}
+
 int who_wins(std::array<std::array<int, SIZE>, SIZE> matrix, std::array<bool, SIZE_SQR> digits, int d) {
 
     if (d == 0) {
@@ -61,11 +68,17 @@ int who_wins(std::array<std::array<int, SIZE>, SIZE> matrix, std::array<bool, SI
                     digits[k] = false;
                     return res;
                 }
+
                 if (is_first(d)) {
                     position_res = std::max(position_res, res);
                 }
                 else {
                     position_res = std::min(position_res, res);
+                }
+                if (is_first(d) && res >= 40 && d != SIZE_SQR) {
+                    digits[k] = false;
+                    printResult(d, k, position_res, first);
+                    return res;
                 }
             }
         }
@@ -75,9 +88,7 @@ int who_wins(std::array<std::array<int, SIZE>, SIZE> matrix, std::array<bool, SI
         else {
             first = std::min(first, position_res);
         }
-        if (d == SIZE_SQR) {
-            std::cout << k + 1 << " " << position_res << std::endl;
-        }
+        printResult(d, k, position_res, first);
         digits[k] = false;
     }
     return first;
@@ -93,12 +104,13 @@ void solve() {
 #include <chrono>
 using namespace std::chrono;
 
+
 int main()
 {
     auto start = high_resolution_clock::now();
     solve();
     auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(stop - start);
-    std::cout << "overall time in ms " << duration.count() << std::endl;
+    auto duration = duration_cast<seconds>(stop - start);
+    std::cout << "overall time in sec " << duration.count() << std::endl;
     return 0;
 }
