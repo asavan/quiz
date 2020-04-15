@@ -46,7 +46,7 @@ namespace {
         }
     }
 
-    int who_wins(int(&matrix)[SIZE][SIZE], bool (&digits)[SIZE_SQR], int d) {
+    int who_wins(int(&matrix)[SIZE][SIZE], bool (&digits)[SIZE_SQR], int d, int best1, int best2) {
 
         if (d == 0) {
             return determinant<SIZE>(matrix);
@@ -64,20 +64,22 @@ namespace {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    int res = who_wins(matrix, digits, d - 1);
+                    int res = who_wins(matrix, digits, d - 1, best1, best2);
                     matrix[i][j] = 0;
-                    if (!is_first(d) && res <= 0) {
+                    if (!is_first(d) && res <= best2) {
                         digits[k] = false;
                         return res;
                     }
 
                     if (is_first(d)) {
                         position_res = std::max(position_res, res);
+                        best2 = std::max(best2, res);
                     }
                     else {
                         position_res = std::min(position_res, res);
+                        best1 = std::min(res, best1);
                     }
-                    if (is_first(d) && res >= 40 && d != SIZE_SQR) {
+                    if (is_first(d) && res >= best1) {
                         digits[k] = false;
                         printResult(d, k, position_res, first);
                         return res;
@@ -100,6 +102,8 @@ namespace {
 void solve_c_array() {
     int matrix[SIZE][SIZE]{};
     bool digits[SIZE_SQR] = { false };
-    int res = who_wins(matrix, digits, SIZE_SQR);
+    int best1 = INT_MAX;
+    int best2 = INT_MIN;
+    int res = who_wins(matrix, digits, SIZE_SQR, best1, best2);
     std::cout << "Best res " << res << std::endl;
 }
