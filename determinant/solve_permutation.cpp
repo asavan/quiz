@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <utility>
 #include <array>
+#include <set>
 
 namespace {
     static constexpr int SIZE = 3;
@@ -52,6 +53,15 @@ namespace {
 void solve_permutation() {
     std::array<std::array<int, SIZE>, SIZE> matrix = { 0 };
     int res = 0;
+    int positive_count = 0;
+    int negative_count = 0;
+    int max_det_count = 0;
+    int min_det_count = 0;
+
+    int zero_count = 0;
+    int max_det = INT_MIN;
+    int min_det = INT_MAX;
+    std::set<int> dets;
     std::array<int, SIZE_SQR> digits = init(std::make_index_sequence<SIZE_SQR>());
     do {
         // print1(digits);
@@ -61,11 +71,62 @@ void solve_permutation() {
                 matrix[i / SIZE][i % SIZE] = digits[i] + 1;
             }
             int det = determinant(matrix);
+            dets.insert(det);
             if (det > 0) {
-                ++res;
+                ++positive_count;
+                if (det > max_det) {
+                    max_det = det;
+                    max_det_count = 1;
+                }
+                else if (det == max_det) {
+                    ++max_det_count;
+                }
+            }
+            else if (det < 0) {
+                ++negative_count;
+                if (det < min_det) {
+                    min_det = det;
+                    min_det_count = 1;
+                }
+                else if (det == min_det) {
+                    ++min_det_count;
+                }
+
+            }
+            else {
+                ++zero_count;
             }
         // } while (std::next_permutation(begin(positions), end(positions)));
     }
     while (std::next_permutation(begin(digits), end(digits)));
-    std::cout << "Best res " << res << std::endl;
+    std::cout << "Max det " << *dets.rbegin() << std::endl;
+    std::cout << "Min det " << *dets.begin() << std::endl;
+    std::cout << "Positive count " << positive_count << std::endl;
+    std::cout << "Negative count " << negative_count << std::endl;
+    std::cout << "Zero count " << zero_count << std::endl;
+
+    std::cout << "Max det count " << max_det_count << std::endl;
+    std::cout << "Min det count " << min_det_count << std::endl;
+
+    for (int det : dets) {
+        std::cout << det << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "det size " << dets.size() << std::endl;
+
+    int prev = 0;
+    int hole_count = 0;
+    for (int det : dets) {
+        if (det > 0) {
+            if (det - prev > 1) {
+                std::cout <<" hole " << det << std::endl;
+                ++hole_count;
+                // break;
+            }
+        }
+        prev = det;
+        
+    }
+    std::cout << "Hole count " << hole_count << std::endl;
+
 }
