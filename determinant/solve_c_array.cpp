@@ -51,13 +51,12 @@ namespace {
         if (d == SIZE_SQR) {
             return determinant<SIZE>(matrix);
         }
-        int first = is_first(d) ? INT_MIN : INT_MAX;
+
         for (int k = 0; k < SIZE_SQR; ++k) {
             if (digits[k]) {
                 continue;
             }
             digits[k] = true;
-            int position_res = is_first(d) ? INT_MIN : INT_MAX;
             for (int i = 0; i < SIZE; ++i) {
                 for (int j = 0; j < SIZE; ++j) {
                     if (matrix[i][j] != 0) {
@@ -67,36 +66,29 @@ namespace {
                     int res = who_wins(matrix, digits, d + 1, best1, best2);
                     matrix[i][j] = 0;
                     if (!is_first(d) && res <= best2) {
-                        printResult(d, k, position_res, best1, best2);
+                        // printResult(d, k, position_res, best1, best2);
                         digits[k] = false;
                         return res;
                     }
 
                     if (is_first(d)) {
-                        position_res = std::max(position_res, res);
                         best2 = std::max(best2, res);
                     }
                     else {
-                        position_res = std::min(position_res, res);
-                        best1 = std::min(res, best1);
+                        best1 = std::min(best1, res);
                     }
                     if (is_first(d) && res >= best1) {
                         digits[k] = false;
-                        printResult(d, k, position_res, best1, best2);
+                        // printResult(d, k, position_res, best1, best2);
                         return res;
                     }
                 }
             }
-            if (is_first(d)) {
-                first = std::max(first, position_res);
-            }
-            else {
-                first = std::min(first, position_res);
-            }
-            printResult(d, k, position_res, best1, best2);
+
+            // printResult(d, k, position_res, best1, best2);
             digits[k] = false;
         }
-        return first;
+        return is_first(d) ? best2 : best1;
     }
 
     template <size_t _Size>
@@ -137,11 +129,10 @@ void solve_precompute() {
     int matrix[3][3] =
     {
       {0, 0, 0},
-      {0, 0, 0},
-      {0, 0, 9}
+      {0, 0, 3},
+      {0, 0, 0}
     };
 
     int res = solve_matrix<3>(matrix);
     std::cout << "Best res " << res << std::endl;
 }
-
