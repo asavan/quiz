@@ -1,5 +1,6 @@
 #include <iostream> 
 #include <algorithm>
+#include <string>
 
 namespace {
 
@@ -105,6 +106,9 @@ namespace {
             int value = matrix[i / 3][i % 3];
             if (value != 0) {
                 ++d;
+                if (digits[value - 1]) {
+                    throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value - 1) + ">");
+                }
                 digits[value - 1] = true;
             }
         }
@@ -133,6 +137,11 @@ void solve_precompute() {
       {0, 0, 0}
     };
 
-    int res = solve_matrix<3>(matrix);
-    std::cout << "Best res " << res << std::endl;
+    try {
+        int res = solve_matrix<3>(matrix);
+        std::cout << "Best res " << res << std::endl;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << ex.what() << std::endl;
+    }
 }
