@@ -1,10 +1,9 @@
 #include <iostream> 
 #include <vector>
+#include <string>
 #include <algorithm>
 
 namespace {
-    static constexpr int SIZE = 3;
-    static constexpr int SIZE_SQR = SIZE * SIZE;
 
     template <size_t _Size>
     int determinant(const std::vector<std::vector<int>>& a);
@@ -25,10 +24,22 @@ namespace {
         return a[0][0] * a[1][1] - a[1][0] * a[0][1];
     }
 
+    int det_vec(const std::vector<std::vector<int>>& a) {
+        if (a.size() == 2) {
+            return determinant<2>(a);
+        }
+        if (a.size() == 3) {
+            return determinant<3>(a);
+        }
+        // TODO
+        return 0;
+    }
 
-    void print(const std::vector<std::vector<int>>& matrix) {
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
+
+    void print_vec(const std::vector<std::vector<int>>& matrix) {
+        int size = matrix.size();
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
                 std::cout << matrix[i][j] << " ";
             }
             std::cout << std::endl;
@@ -36,68 +47,139 @@ namespace {
     }
 
     inline bool is_first(int d) {
-        return ((SIZE_SQR - d) % 2) == 0;
+        return d % 2 == 0;
     }
 
-    void printResult(int d, int k, int position_res, int first)
-    {
-        if (d == SIZE_SQR) {
-            std::cout << k + 1 << " " << position_res << std::endl;
+    struct BestResult {
+        std::vector<std::vector<int>> m;
+        int i = -1;
+        int j = -1;
+        int k = -1;
+        int result = INT_MAX;
+        void print() {
+            std::cout << "Best res " << result << std::endl;
+            print_vec(m);
         }
-    }
+    };
 
-    int who_wins(std::vector<std::vector<int>> matrix, std::vector<bool> digits, int d) {
 
-        if (d == 0) {
-            return determinant<SIZE>(matrix);
+    BestResult who_wins(std::vector<std::vector<int>>& matrix, std::vector<bool>& digits, int d, int best1, int best2, int init_d) {
+
+        int size = matrix.size();
+        int size_sqr = size * size;
+        BestResult answer;
+
+        if (d == size_sqr) {
+            int det = det_vec(matrix);
+            //print_vec(matrix);
+            //std::cout << "Det " << det << std::endl;
+
+            if (d == init_d) {
+                answer.m = matrix;
+            }
+            answer.result = det;
+            return answer;
         }
-        int first = is_first(d) ? INT_MIN : INT_MAX;
-        for (int k = 0; k < SIZE_SQR; ++k) {
+        for (int k = 0; k < size_sqr; ++k) {
             if (digits[k]) {
                 continue;
             }
             digits[k] = true;
-            int position_res = is_first(d) ? INT_MIN : INT_MAX;
-            for (int i = 0; i < SIZE; ++i) {
-                for (int j = 0; j < SIZE; ++j) {
+            for (int i = 0; i < size; ++i) {
+                for (int j = 0; j < size; ++j) {
                     if (matrix[i][j] != 0) {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    int res = who_wins(matrix, digits, d - 1);                    
-                    if (!is_first(d) && res <= 0) {
-                        return res;
-                    }
-
+                    int res = who_wins(matrix, digits, d + 1, best1, best2, init_d).result;
                     if (is_first(d)) {
-                        position_res = std::max(position_res, res);
+                        if (best2 < res) {
+                            best2 = res;
+                            if (d == init_d) {
+                                answer.i = i;
+                                answer.j = j;
+                                answer.k = k;
+                                answer.m = matrix;
+                            }
+                            answer.result = res;
+                        }
+                        best2 = std::max(best2, res);
                     }
                     else {
-                        position_res = std::min(position_res, res);
+                        if (best1 > res) {
+                            best1 = res;
+                            if (d == init_d) {
+                                answer.i = i;
+                                answer.j = j;
+                                answer.k = k;
+                                answer.m = matrix;
+                            }
+                            answer.result = res;
+                        }
+                        best1 = std::min(best1, res);
                     }
-                    if (is_first(d) && res >= 40 && d != SIZE_SQR) {
-                        printResult(d, k, position_res, first);
-                        return res;
-                    }
+
                     matrix[i][j] = 0;
+
+                    if ((!is_first(d) && res <= best2) || (is_first(d) && res >= best1)) {
+                        digits[k] = false;
+                        if (d == init_d) {
+                            answer.i = i;
+                            answer.j = j;
+                            answer.k = k;
+                            answer.m = matrix;
+                        }
+                        answer.result = res;
+                        return answer;
+                    }
                 }
             }
-            if (is_first(d)) {
-                first = std::max(first, position_res);
-            }
-            else {
-                first = std::min(first, position_res);
-            }
-            printResult(d, k, position_res, first);
+
             digits[k] = false;
         }
-        return first;
+        answer.result = is_first(d) ? best2 : best1;
+        return answer;
+    }
+    
+    BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
+        std::vector<std::vector<int>> matrix = matrix_;
+        int size = matrix.size();
+        int size_sqr = size * size;
+
+        std::vector<bool> digits(size_sqr, false);
+        int d = 0;
+        for (int i = 0; i < size_sqr; ++i) {
+            int value = matrix[i / size][i % size];
+            if (value != 0) {
+                ++d;
+                int index = value - 1;
+                if (digits[index]) {
+                    throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
+                }
+                digits[index] = true;
+            }
+        }
+
+        int best1 = INT_MAX;
+        int best2 = INT_MIN;
+        BestResult res = who_wins(matrix, digits, d, best1, best2, d);
+        return res;
     }
 }
 
 void solve_vector() {
-    std::vector<std::vector<int>> matrix(SIZE, std::vector<int>(SIZE, 0));
-    std::vector<bool> digits(SIZE_SQR, false);
-    int res = who_wins(matrix, digits, SIZE_SQR);
-    std::cout << "Best res " << res << std::endl;
+    std::vector<std::vector<int>> matrix = {
+      {0, 0, 0},
+      {0, 0, 0},
+      {0, 0, 0}
+    };
+
+    try {
+        BestResult res = solve_matrix(matrix);
+        res.print();
+    }
+    catch (const std::exception& ex) {
+        std::cerr << ex.what() << std::endl;
+    }
+
 }

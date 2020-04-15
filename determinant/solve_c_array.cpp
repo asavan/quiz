@@ -5,7 +5,7 @@
 
 namespace {
 
-    static constexpr int SIZE = 2;
+    static constexpr int SIZE = 3;
     static constexpr int SIZE_SQR = SIZE * SIZE;
 
     template <size_t _Size>
@@ -81,8 +81,6 @@ namespace {
             return determinant<SIZE>(matrix);
         }
 
-        int matrix_best[SIZE][SIZE]{};
-
         for (int k = 0; k < SIZE_SQR; ++k) {
             if (digits[k]) {
                 continue;
@@ -100,14 +98,12 @@ namespace {
                     if (is_first(d)) {
                         if (best2 < res) {
                             best2 = res;
-                            copy_matrix(matrix, matrix_best);
                         }
                         // best2 = std::max(best2, res);
                     }
                     else {
                         if (best1 > res) {
                             best1 = res;
-                            copy_matrix(matrix, matrix_best);
                         }
                         // best1 = std::min(best1, res);
                     }
@@ -115,10 +111,6 @@ namespace {
                     matrix[i][j] = 0;
 
                     if ((!is_first(d) && res <= best2) || (is_first(d) && res >= best1)) {
-                        // printResult(d, k, position_res, best1, best2);
-                        if (d == 1) {
-                            // print(matrix_best);
-                        }
                         digits[k] = false;
                         return res;
                     }
@@ -127,9 +119,6 @@ namespace {
 
             // printResult(d, k, position_res, best1, best2);
             digits[k] = false;
-        }
-        if (d == 0) {
-            print(matrix_best);
         }
         return is_first(d) ? best2 : best1;
     }
@@ -295,19 +284,19 @@ void solve_c_array() {
 void solve_precompute() {
     int matrix3[3][3] =
     {
-      {0, 0, 0},
-      {0, 5, 0},
-      {0, 0, 0}
+      {3, 9, 5},
+      {0, 8, 1},
+      {2, 4, 7}
     };
 
     int matrix2[2][2] =
     {
-      {0, 0},
-      {0, 1}
+      {0, 1},
+      {3, 0}
     };
 
     try {
-        BestResult res = solve_matrix(matrix2);
+        BestResult res = solve_matrix(matrix3);
         // std::cout << "Best res " << res << std::endl;
         res.print();
     }

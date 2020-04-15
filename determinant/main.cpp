@@ -11,7 +11,7 @@ void solve_precompute();
 int main()
 {
     auto start = high_resolution_clock::now();
-    solve_precompute();
+    solve_vector();
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(stop - start);
     std::cout << "overall time in ms " << duration.count() << std::endl;

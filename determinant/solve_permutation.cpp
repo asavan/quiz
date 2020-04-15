@@ -55,8 +55,8 @@ void solve_permutation() {
     std::array<int, SIZE_SQR> digits = init(std::make_index_sequence<SIZE_SQR>());
     do {
         // print1(digits);
-        std::array<int, SIZE_SQR> positions = init(std::make_index_sequence<SIZE_SQR>());
-        do {
+        // std::array<int, SIZE_SQR> positions = init(std::make_index_sequence<SIZE_SQR>());
+        // do {
             for (int i = 0; i < SIZE_SQR; ++i) {
                 matrix[i / SIZE][i % SIZE] = digits[i] + 1;
             }
@@ -64,7 +64,7 @@ void solve_permutation() {
             if (det > 0) {
                 ++res;
             }
-        } while (std::next_permutation(begin(positions), end(positions)));
+        // } while (std::next_permutation(begin(positions), end(positions)));
     }
     while (std::next_permutation(begin(digits), end(digits)));
     std::cout << "Best res " << res << std::endl;
