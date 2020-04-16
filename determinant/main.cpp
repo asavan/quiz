@@ -20,14 +20,26 @@ void mesure(BestResult(*f)(), const std::string& name)
     }
 }
 
+void mesure_int(int(*f)(), const std::string& name)
+{
+    auto start = high_resolution_clock::now();
+    int res = f();
 
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+
+    std::cout << "Best res " << res << std::endl;
+    std::cout << name << " overall time in ms " << duration.count() << std::endl;
+}
 
 int main()
 {
-    // mesure(solve_precompute, "solve_precompute");
+    // 
+    // 
+    mesure_int(solve_array, "solve_array");
+    mesure_int(solve_c_array, "solve_c_array");
+    mesure(solve_precompute, "solve_precompute");
     // mesure(solve_vector, "solve_vector");
-    mesure(solve_c_array, "solve_c_array");
-    mesure(solve_array, "solve_array");
     //mesure(solve_array, "solve_array");
     //mesure(solve_c_array, "solve_c_array");
 

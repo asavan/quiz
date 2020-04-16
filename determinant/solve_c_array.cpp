@@ -1,5 +1,4 @@
 #include "solver.h"
-#include <algorithm>
 #include <string>
 #include <stdexcept>
 
@@ -130,7 +129,6 @@ namespace {
                             }
                             answer.result = res;
                         }
-                        // best2 = std::max(best2, res);
                     }
                     else {
                         if (best1 > res) {
@@ -143,7 +141,6 @@ namespace {
                             }
                             answer.result = res;
                         }
-                        // best1 = std::min(best1, res);
                     }
 
                     matrix[i][j] = 0;
@@ -162,7 +159,6 @@ namespace {
                 }
             }
 
-            // printResult(d, k, position_res, best1, best2);
             digits[k] = false;
         }
         answer.result = is_first(d) ? best2 : best1;
@@ -170,7 +166,6 @@ namespace {
     }
 
 
-    // template <size_t _Size>
     BestResult solve_matrix(const int(&matrix_)[SIZE][SIZE]) {
         int matrix[SIZE][SIZE];
         for (int i = 0; i < SIZE; ++i) {
@@ -199,15 +194,12 @@ namespace {
 
 }
 
-BestResult solve_c_array() {
+int solve_c_array() {
     int matrix[SIZE][SIZE]{};
     bool digits[SIZE_SQR] = { false };
     int best1 = INT_MAX;
     int best2 = INT_MIN;
-    int res = who_wins(matrix, digits, 0, best1, best2);
-    BestResult answer;
-    answer.result = res;
-    return answer;
+    return who_wins(matrix, digits, 0, best1, best2);
 }
 
 BestResult solve_precompute() {

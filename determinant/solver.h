@@ -11,9 +11,10 @@ struct BestResult {
     void print();
 };
 
-BestResult solve_array();
+int solve_c_array();
+int solve_array();
+
 BestResult solve_vector();
-BestResult solve_c_array();
 BestResult solve_precompute();
 
 void solve_permutation();

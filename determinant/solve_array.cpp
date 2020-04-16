@@ -1,5 +1,5 @@
-#include <array>
 #include "solver.h"
+#include <array>
 
 namespace {
     static constexpr int SIZE = 3;
@@ -67,13 +67,10 @@ namespace {
     }
 }
 
-BestResult solve_array() {
+int solve_array() {
     std::array<std::array<int, SIZE>, SIZE> matrix = { 0 };
     std::array<bool, SIZE_SQR> digits = { false };
     int best1 = INT_MAX;
     int best2 = INT_MIN;
-    int res = who_wins(matrix, digits, 0, best1, best2);
-    BestResult answer;
-    answer.result = res;
-    return answer;
+    return who_wins(matrix, digits, 0, best1, best2);
 }
