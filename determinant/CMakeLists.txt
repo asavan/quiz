@@ -4,14 +4,12 @@ cmake_minimum_required(VERSION 3.1)
 
 project(determinant)
 
-set(SOURCES main.cpp solve_array.cpp 
-			solve_vector.cpp 
-			solve_c_array.cpp 
-			solve_permutation.cpp
-			common.cpp)
-set(HEADERS solver.h)
+add_subdirectory(solver)
+add_subdirectory(tests)
 
-add_executable(determinant ${SOURCES} ${HEADERS})
+set(SOURCES main.cpp)
+
+add_executable(determinant ${SOURCES})
 set_property(TARGET determinant PROPERTY CXX_STANDARD 20)
 
-# target_link_libraries(determinant solverlib)
+target_link_libraries(determinant solverlib)
