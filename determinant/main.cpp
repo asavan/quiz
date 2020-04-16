@@ -1,6 +1,14 @@
-#include "solver/solver.h"
-#include <chrono>
-#include <iostream> 
+#include "measure/measure.h"
+
+void m4()
+{
+    std::vector<std::vector<int>> matrix = {
+      {0, 0, 0},
+      {0, 8, 0},
+      {0, 0, 2}
+    };
+    measure("m4", matrix);
+}
 
 
 void m3()
@@ -19,8 +27,7 @@ void m3()
         int y = i / size;
         int x = i % size;
         matrix[y][x] = 1;
-        auto res = solve_matrix(matrix);
-        res.print();
+        measure("m3", matrix);
         matrix[y][x] = 0;
     }
 }
@@ -39,14 +46,13 @@ void m2()
         int y = i / size;
         int x = i % size;
         matrix[y][x] = 1;
-        auto res = solve_matrix(matrix);
-        res.print();
+        measure("m2", matrix);
         matrix[y][x] = 0;
     }
 }
 
 int main() {
-    m3();
+    m4();
     m2();
     return 0;
 }
