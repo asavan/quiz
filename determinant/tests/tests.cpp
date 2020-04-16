@@ -20,5 +20,13 @@ int main()
 
     res = solve_matrix(matrix);
     assert(res.result == -9);
+
+    matrix = {
+      {0, 0},
+      {0, 0}
+    };
+
+    res = solve_matrix(matrix);
+    assert(res.result == 1);
     return 0;
 }

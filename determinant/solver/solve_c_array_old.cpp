@@ -1,17 +1,15 @@
-#include <array>
-
 namespace {
+
     static constexpr int SIZE = 3;
     static constexpr int SIZE_SQR = SIZE * SIZE;
     static constexpr int INF = 500;
     static constexpr int MINUS_INF = -500;
 
-
     template <size_t _Size>
-    int determinant(const std::array<std::array<int, _Size>, _Size>& a);
+    int determinant(const int(&a)[_Size][_Size]);
 
     template<>
-    int determinant<3>(const std::array<std::array<int, 3>, 3>& a) {
+    int determinant<3>(const int(&a)[3][3]) {
         return
             a[0][0] * a[1][1] * a[2][2] +
             a[2][0] * a[0][1] * a[1][2] +
@@ -22,7 +20,7 @@ namespace {
     }
 
     template<>
-    int determinant<2>(const std::array<std::array<int, 2>, 2>& a) {
+    int determinant<2>(const int(&a)[2][2]) {
         return a[0][0] * a[1][1] - a[1][0] * a[0][1];
     }
 
@@ -30,11 +28,12 @@ namespace {
         return step % 2 == 0;
     }
 
-    int who_wins(std::array<std::array<int, SIZE>, SIZE> matrix, std::array<bool, SIZE_SQR> digits, int d, int best1, int best2) {
+    int who_wins(int(&matrix)[SIZE][SIZE], bool(&digits)[SIZE_SQR], int step, int best1, int best2) {
 
-        if (d == SIZE_SQR) {
+        if (step == SIZE_SQR) {
             return determinant<SIZE>(matrix);
         }
+
         for (int k = 0; k < SIZE_SQR; ++k) {
             if (digits[k]) {
                 continue;
@@ -46,9 +45,10 @@ namespace {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    int res = who_wins(matrix, digits, d + 1, best1, best2);
+                    int res = who_wins(matrix, digits, step + 1, best1, best2);
 
-                    if (is_first(d)) {
+
+                    if (is_first(step)) {
                         if (best2 < res) {
                             best2 = res;
                         }
@@ -61,7 +61,7 @@ namespace {
 
                     matrix[i][j] = 0;
 
-                    if ((!is_first(d) && res <= best2) || (is_first(d) && res >= best1)) {
+                    if ((!is_first(step) && res <= best2) || (is_first(step) && res >= best1)) {
                         digits[k] = false;
                         return res;
                     }
@@ -69,13 +69,13 @@ namespace {
             }
             digits[k] = false;
         }
-        return is_first(d) ? best2 : best1;
+        return is_first(step) ? best2 : best1;
     }
 }
 
-int solve_array() {
-    std::array<std::array<int, SIZE>, SIZE> matrix = { 0 };
-    std::array<bool, SIZE_SQR> digits = { false };
+int solve_c_array() {
+    int matrix[SIZE][SIZE]{};
+    bool digits[SIZE_SQR] = { false };
     int best1 = INF;
     int best2 = MINUS_INF;
     return who_wins(matrix, digits, 0, best1, best2);

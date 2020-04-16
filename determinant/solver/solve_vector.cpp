@@ -115,31 +115,33 @@ namespace {
         return answer;
     }
     
-    BestResult solve_matrix_vec(const std::vector<std::vector<int>>& matrix_) {
-        std::vector<std::vector<int>> matrix = matrix_;
-        int size = matrix.size();
+}
 
-        std::vector<bool> digits(size * size, false);
-        int step = 0;
-        for (int i = 0; i < size; ++i) {
-            for (int j = 0; j < size; ++j) {
-                int value = matrix[i][j];
-                if (value != 0) {
-                    ++step;
-                    int index = value - 1;
-                    if (digits[index]) {
-                        throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
-                    }
-                    digits[index] = true;
+BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
+    std::vector<std::vector<int>> matrix = matrix_;
+    int size = matrix.size();
+
+    std::vector<bool> digits(size * size, false);
+    int step = 0;
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            int value = matrix[i][j];
+            if (value != 0) {
+                ++step;
+                int index = value - 1;
+                if (digits[index]) {
+                    throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
                 }
+                digits[index] = true;
             }
         }
-
-        int best1 = INT_MAX;
-        int best2 = INT_MIN;
-        return who_wins(matrix, digits, step, best1, best2, true);
     }
+
+    int best1 = INT_MAX;
+    int best2 = INT_MIN;
+    return who_wins(matrix, digits, step, best1, best2, true);
 }
+
 
 BestResult solve_vector() {
     std::vector<std::vector<int>> matrix = {
@@ -148,6 +150,6 @@ BestResult solve_vector() {
       {0, 0, 0}
     };
 
-    return solve_matrix_vec(matrix);
+    return solve_matrix(matrix);
 }
 

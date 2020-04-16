@@ -168,7 +168,7 @@ namespace {
 
 }
 
-BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
+BestResult solve_matrix_c(const std::vector<std::vector<int>>& matrix_) {
     if (matrix_.size() != SIZE) {
         throw std::invalid_argument("wrong matrix size");
     }
@@ -200,15 +200,6 @@ BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
     return res;
 }
 
-
-int solve_c_array() {
-    int matrix[SIZE][SIZE]{};
-    bool digits[SIZE_SQR] = { false };
-    int best1 = INT_MAX;
-    int best2 = INT_MIN;
-    return who_wins(matrix, digits, 0, best1, best2);
-}
-
 BestResult solve_precompute() {
     std::vector<std::vector<int>> matrix = {
       {0, 0, 0},
@@ -216,5 +207,5 @@ BestResult solve_precompute() {
       {0, 0, 0}
     };
 
-    return solve_matrix(matrix);
+    return solve_matrix_c(matrix);
 }
