@@ -13,6 +13,7 @@ struct BestResult {
 
 int solve_c_array();
 int solve_array();
+int solve_vector_simple();
 
 BestResult solve_vector();
 BestResult solve_precompute();
