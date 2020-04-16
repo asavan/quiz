@@ -1,7 +1,9 @@
-#include <iostream> 
+#include "solver.h"
 #include <vector>
 #include <string>
-#include <algorithm>
+// #include <algorithm>
+#include <stdexcept>
+
 
 namespace {
 
@@ -34,33 +36,7 @@ namespace {
         // TODO
         return 0;
     }
-
-
-    void print_vec(const std::vector<std::vector<int>>& matrix) {
-        int size = matrix.size();
-        for (int i = 0; i < size; ++i) {
-            for (int j = 0; j < size; ++j) {
-                std::cout << matrix[i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
-
-    inline bool is_first(int d) {
-        return d % 2 == 0;
-    }
-
-    struct BestResult {
-        std::vector<std::vector<int>> m;
-        int i = -1;
-        int j = -1;
-        int k = -1;
-        int result = INT_MAX;
-        void print() {
-            std::cout << "Best res " << result << std::endl;
-            print_vec(m);
-        }
-    };
+    
 
     /***
     * matrix - матрица в которой уже стоят какие-то числа, новое число можно ставить в клетки со значением 0
@@ -110,7 +86,7 @@ namespace {
                             }
                             answer.result = res;
                         }
-                        best2 = std::max(best2, res);
+                        // best2 = std::max(best2, res);
                     }
                     else {
                         if (best1 > res) {
@@ -123,7 +99,7 @@ namespace {
                             }
                             answer.result = res;
                         }
-                        best1 = std::min(best1, res);
+                        // best1 = std::min(best1, res);
                     }
 
                     matrix[i][j] = 0;
@@ -151,19 +127,20 @@ namespace {
     BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
         std::vector<std::vector<int>> matrix = matrix_;
         int size = matrix.size();
-        int size_sqr = size * size;
 
-        std::vector<bool> digits(size_sqr, false);
+        std::vector<bool> digits(size * size, false);
         int d = 0;
-        for (int i = 0; i < size_sqr; ++i) {
-            int value = matrix[i / size][i % size];
-            if (value != 0) {
-                ++d;
-                int index = value - 1;
-                if (digits[index]) {
-                    throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
+                int value = matrix[i][j];
+                if (value != 0) {
+                    ++d;
+                    int index = value - 1;
+                    if (digits[index]) {
+                        throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
+                    }
+                    digits[index] = true;
                 }
-                digits[index] = true;
             }
         }
 
@@ -174,19 +151,12 @@ namespace {
     }
 }
 
-void solve_vector() {
+BestResult solve_vector() {
     std::vector<std::vector<int>> matrix = {
       {0, 0, 0},
       {0, 0, 0},
       {0, 0, 0}
     };
 
-    try {
-        BestResult res = solve_matrix(matrix);
-        res.print();
-    }
-    catch (const std::exception& ex) {
-        std::cerr << ex.what() << std::endl;
-    }
-
+    return solve_matrix(matrix);
 }

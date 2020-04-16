@@ -1,7 +1,7 @@
-#include <iostream> 
+#include "solver.h"
 #include <algorithm>
 #include <string>
-#include <vector>
+#include <stdexcept>
 
 namespace {
 
@@ -27,51 +27,19 @@ namespace {
         return a[0][0] * a[1][1] - a[1][0] * a[0][1];
     }
 
-
-    void print(const int(&matrix)[SIZE][SIZE]) {
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                std::cout << matrix[i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
-
-    void print_vector(const std::vector<std::vector<int>>& matrix) {
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                std::cout << matrix[i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
-
-
-    void copy_matrix(const int(&src)[SIZE][SIZE], int(&dst)[SIZE][SIZE]) {
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                dst[i][j] = src[i][j];
-            }
-        }
-    }
+    //void copy_matrix(const int(&src)[SIZE][SIZE], int(&dst)[SIZE][SIZE]) {
+    //    for (int i = 0; i < SIZE; ++i) {
+    //        for (int j = 0; j < SIZE; ++j) {
+    //            dst[i][j] = src[i][j];
+    //        }
+    //    }
+    //}
 
     void copy_matrix(const int(&src)[SIZE][SIZE], std::vector<std::vector<int>>& dst) {
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
                 dst[i][j] = src[i][j];
             }
-        }
-    }
-
-
-    inline bool is_first(int d) {
-        return d % 2 == 0;
-    }
-
-    void printResult(int d, int k, int position_res, int best1, int best2)
-    {
-        if (d <= 0) {
-            std::cout << k + 1 << " " << position_res << " " << best1 << " " << best2 << std::endl;
         }
     }
 
@@ -99,13 +67,11 @@ namespace {
                         if (best2 < res) {
                             best2 = res;
                         }
-                        // best2 = std::max(best2, res);
                     }
                     else {
                         if (best1 > res) {
                             best1 = res;
                         }
-                        // best1 = std::min(best1, res);
                     }
 
                     matrix[i][j] = 0;
@@ -116,24 +82,10 @@ namespace {
                     }
                 }
             }
-
-            // printResult(d, k, position_res, best1, best2);
             digits[k] = false;
         }
         return is_first(d) ? best2 : best1;
     }
-
-    struct BestResult {
-        std::vector<std::vector<int>> m;
-        int i;
-        int j;
-        int k;
-        int result;
-        void print() {
-            std::cout << "Best res " << result << std::endl;
-            print_vector(m);
-        }
-    };
 
     BestResult next_step(int(&matrix)[SIZE][SIZE], bool(&digits)[SIZE_SQR], int d, int best1, int best2, int init_d) {
 
@@ -163,7 +115,8 @@ namespace {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    int res = next_step(matrix, digits, d + 1, best1, best2, init_d).result;
+                    // int res = next_step(matrix, digits, d + 1, best1, best2, init_d).result;
+                    int res = who_wins(matrix, digits, d + 1, best1, best2);
 
 
                     if (is_first(d)) {
@@ -244,44 +197,21 @@ namespace {
         return res;
     }
 
-    template <size_t _Size>
-    int solve_matrix_old(const int(&matrix_)[_Size][_Size]) {
-        int matrix[_Size][_Size];
-        for (int i = 0; i < _Size; ++i) {
-            for (int j = 0; j < _Size; ++j) {
-                matrix[i][j] = matrix_[i][j];
-            }
-        }
-        bool digits[SIZE_SQR]{};
-        int d = 0;
-        for (int i = 0; i < SIZE_SQR; ++i) {
-            int value = matrix[i / _Size][i % _Size];
-            if (value != 0) {
-                ++d;
-                if (digits[value - 1]) {
-                    throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
-                }
-                digits[value - 1] = true;
-            }
-        }
-
-        int best1 = INT_MAX;
-        int best2 = INT_MIN;
-        int res = who_wins(matrix, digits, d, best1, best2);
-        return res;
-    }
 }
 
-void solve_c_array() {
+BestResult solve_c_array() {
     int matrix[SIZE][SIZE]{};
     bool digits[SIZE_SQR] = { false };
     int best1 = INT_MAX;
     int best2 = INT_MIN;
     int res = who_wins(matrix, digits, 0, best1, best2);
-    std::cout << "Best res " << res << std::endl;
+    BestResult answer;
+    answer.result = res;
+    return answer;
 }
 
-void solve_precompute() {
+BestResult solve_precompute() {
+    int matrix30[3][3]{};
     int matrix3[3][3] =
     {
       {3, 9, 5},
@@ -295,12 +225,5 @@ void solve_precompute() {
       {3, 0}
     };
 
-    try {
-        BestResult res = solve_matrix(matrix3);
-        // std::cout << "Best res " << res << std::endl;
-        res.print();
-    }
-    catch (const std::exception& ex) {
-        std::cerr << ex.what() << std::endl;
-    }
+    return solve_matrix(matrix30);
 }

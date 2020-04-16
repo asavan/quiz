@@ -1,5 +1,5 @@
-#include <iostream> 
 #include <array>
+#include "solver.h"
 
 namespace {
     static constexpr int SIZE = 3;
@@ -24,81 +24,56 @@ namespace {
         return a[0][0] * a[1][1] - a[1][0] * a[0][1];
     }
 
+    int who_wins(std::array<std::array<int, SIZE>, SIZE> matrix, std::array<bool, SIZE_SQR> digits, int d, int best1, int best2) {
 
-    void print(const std::array<std::array<int, SIZE>, SIZE>& matrix) {
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                std::cout << matrix[i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
-
-    inline bool is_first(int d) {
-        return ((SIZE_SQR - d) % 2) == 0;
-    }
-
-    void printResult(int d, int k, int position_res, int first)
-    {
         if (d == SIZE_SQR) {
-            std::cout << k + 1 << " " << position_res << std::endl;
-        }
-    }
-
-    int who_wins(std::array<std::array<int, SIZE>, SIZE> matrix, std::array<bool, SIZE_SQR> digits, int d) {
-
-        if (d == 0) {
             return determinant<SIZE>(matrix);
         }
-        int first = is_first(d) ? INT_MIN : INT_MAX;
         for (int k = 0; k < SIZE_SQR; ++k) {
             if (digits[k]) {
                 continue;
             }
             digits[k] = true;
-            int position_res = is_first(d) ? INT_MIN : INT_MAX;
             for (int i = 0; i < SIZE; ++i) {
                 for (int j = 0; j < SIZE; ++j) {
                     if (matrix[i][j] != 0) {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    int res = who_wins(matrix, digits, d - 1);
-                    matrix[i][j] = 0;
-                    if (!is_first(d) && res <= 0) {
-                        digits[k] = false;
-                        return res;
-                    }
+                    int res = who_wins(matrix, digits, d + 1, best1, best2);
 
                     if (is_first(d)) {
-                        position_res = std::max(position_res, res);
+                        if (best2 < res) {
+                            best2 = res;
+                        }
                     }
                     else {
-                        position_res = std::min(position_res, res);
+                        if (best1 > res) {
+                            best1 = res;
+                        }
                     }
-                    if (is_first(d) && res >= 40 && d != SIZE_SQR) {
+
+                    matrix[i][j] = 0;
+
+                    if ((!is_first(d) && res <= best2) || (is_first(d) && res >= best1)) {
                         digits[k] = false;
-                        printResult(d, k, position_res, first);
                         return res;
                     }
                 }
             }
-            if (is_first(d)) {
-                first = std::max(first, position_res);
-            }
-            else {
-                first = std::min(first, position_res);
-            }
-            printResult(d, k, position_res, first);
             digits[k] = false;
         }
-        return first;
+        return is_first(d) ? best2 : best1;
     }
 }
 
-void solve_array() {
+BestResult solve_array() {
     std::array<std::array<int, SIZE>, SIZE> matrix = { 0 };
     std::array<bool, SIZE_SQR> digits = { false };
-    int res = who_wins(matrix, digits, SIZE_SQR);
-    std::cout << "Best res " << res << std::endl;
+    int best1 = INT_MAX;
+    int best2 = INT_MIN;
+    int res = who_wins(matrix, digits, 0, best1, best2);
+    BestResult answer;
+    answer.result = res;
+    return answer;
 }

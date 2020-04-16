@@ -3,6 +3,7 @@
 #include <utility>
 #include <array>
 #include <set>
+#include <climits>
 
 namespace {
     static constexpr int SIZE = 3;
