@@ -34,14 +34,13 @@ void mesure_int(int(*f)(), const std::string& name)
 
 int main()
 {
-    // 
-    // 
+
     mesure_int(solve_array, "solve_array");
     mesure_int(solve_c_array, "solve_c_array");
     mesure(solve_precompute, "solve_precompute");
-    // mesure(solve_vector, "solve_vector");
-    //mesure(solve_array, "solve_array");
-    //mesure(solve_c_array, "solve_c_array");
+    mesure(solve_vector, "solve_vector");
+    mesure_int(solve_array, "solve_array");
+    mesure_int(solve_c_array, "solve_c_array");
 
     return 0;
 }

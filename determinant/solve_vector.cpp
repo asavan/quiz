@@ -43,9 +43,9 @@ namespace {
     * d - номер хода. d == 0 - ход первого игрока
     * best1 - первый игрок не может выиграть больше best1 при идеальной игре второго игрока
     * best2 - второй игрок не может набрать меньше best2(он хочет набрать как можно меньше) при идеальной игре первого игрока
-    * init_d - для какого номера хода надо получить ответ
+    * need_fill_result - нужно ли запоминать матрицу лучшего хода
     */
-    BestResult who_wins(std::vector<std::vector<int>>& matrix, std::vector<bool>& digits, int d, int best1, int best2, int init_d) {
+    BestResult who_wins(std::vector<std::vector<int>>& matrix, std::vector<bool>& digits, int d, int best1, int best2, bool need_fill_result) {
 
         int size = matrix.size();
         int size_sqr = size * size;
@@ -53,12 +53,6 @@ namespace {
 
         if (d == size_sqr) {
             int det = det_vec(matrix);
-            //print_vec(matrix);
-            //std::cout << "Det " << det << std::endl;
-
-            if (d == init_d) {
-                answer.m = matrix;
-            }
             answer.result = det;
             return answer;
         }
@@ -73,11 +67,11 @@ namespace {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    int res = who_wins(matrix, digits, d + 1, best1, best2, init_d).result;
+                    int res = who_wins(matrix, digits, d + 1, best1, best2, false).result;
                     if (is_first(d)) {
                         if (best2 < res) {
                             best2 = res;
-                            if (d == init_d) {
+                            if (need_fill_result) {
                                 answer.i = i;
                                 answer.j = j;
                                 answer.k = k;
@@ -85,12 +79,11 @@ namespace {
                             }
                             answer.result = res;
                         }
-                        // best2 = std::max(best2, res);
                     }
                     else {
                         if (best1 > res) {
                             best1 = res;
-                            if (d == init_d) {
+                            if (need_fill_result) {
                                 answer.i = i;
                                 answer.j = j;
                                 answer.k = k;
@@ -98,14 +91,13 @@ namespace {
                             }
                             answer.result = res;
                         }
-                        // best1 = std::min(best1, res);
                     }
 
                     matrix[i][j] = 0;
 
                     if ((!is_first(d) && res <= best2) || (is_first(d) && res >= best1)) {
                         digits[k] = false;
-                        if (d == init_d) {
+                        if (need_fill_result) {
                             answer.i = i;
                             answer.j = j;
                             answer.k = k;
@@ -123,17 +115,17 @@ namespace {
         return answer;
     }
     
-    BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
+    BestResult solve_matrix_vec(const std::vector<std::vector<int>>& matrix_) {
         std::vector<std::vector<int>> matrix = matrix_;
         int size = matrix.size();
 
         std::vector<bool> digits(size * size, false);
-        int d = 0;
+        int step = 0;
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
                 int value = matrix[i][j];
                 if (value != 0) {
-                    ++d;
+                    ++step;
                     int index = value - 1;
                     if (digits[index]) {
                         throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
@@ -145,8 +137,7 @@ namespace {
 
         int best1 = INT_MAX;
         int best2 = INT_MIN;
-        BestResult res = who_wins(matrix, digits, d, best1, best2, d);
-        return res;
+        return who_wins(matrix, digits, step, best1, best2, true);
     }
 }
 
@@ -157,5 +148,6 @@ BestResult solve_vector() {
       {0, 0, 0}
     };
 
-    return solve_matrix(matrix);
+    return solve_matrix_vec(matrix);
 }
+

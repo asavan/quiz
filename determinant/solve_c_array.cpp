@@ -86,15 +86,15 @@ namespace {
         return is_first(d) ? best2 : best1;
     }
 
-    BestResult next_step(int(&matrix)[SIZE][SIZE], bool(&digits)[SIZE_SQR], int d, int best1, int best2, int init_d) {
+    BestResult next_step(int(&matrix)[SIZE][SIZE], bool(&digits)[SIZE_SQR], int d, int best1, int best2, bool need_fill_result) {
 
         BestResult answer;
-        if (d == init_d) {
+        if (need_fill_result) {
             answer.m = std::vector<std::vector<int>>(SIZE, std::vector<int>(SIZE, 0));
         }
 
         if (d == SIZE_SQR) {
-            if (d == init_d) {
+            if (need_fill_result) {
                 copy_matrix(matrix, answer.m);
             }
             int det = determinant<SIZE>(matrix);
@@ -114,14 +114,14 @@ namespace {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    // int res = next_step(matrix, digits, d + 1, best1, best2, init_d).result;
+                    // int res = next_step(matrix, digits, d + 1, best1, best2, false).result;
                     int res = who_wins(matrix, digits, d + 1, best1, best2);
 
 
                     if (is_first(d)) {
                         if (best2 < res) {
                             best2 = res;
-                            if (d == init_d) {
+                            if (need_fill_result) {
                                 answer.i = i;
                                 answer.j = j;
                                 answer.k = k;
@@ -133,7 +133,7 @@ namespace {
                     else {
                         if (best1 > res) {
                             best1 = res;
-                            if (d == init_d) {
+                            if (need_fill_result) {
                                 answer.i = i;
                                 answer.j = j;
                                 answer.k = k;
@@ -147,7 +147,7 @@ namespace {
 
                     if ((!is_first(d) && res <= best2) || (is_first(d) && res >= best1)) {
                         digits[k] = false;
-                        if (d == init_d) {
+                        if (need_fill_result) {
                             answer.i = i;
                             answer.j = j;
                             answer.k = k;                            
@@ -166,33 +166,40 @@ namespace {
     }
 
 
-    BestResult solve_matrix(const int(&matrix_)[SIZE][SIZE]) {
-        int matrix[SIZE][SIZE];
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                matrix[i][j] = matrix_[i][j];
-            }
+}
+
+BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
+    if (matrix_.size() != SIZE) {
+        throw std::invalid_argument("wrong matrix size");
+    }
+    int matrix[SIZE][SIZE];
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            matrix[i][j] = matrix_[i][j];
         }
-        bool digits[SIZE_SQR]{};
-        int d = 0;
-        for (int i = 0; i < SIZE_SQR; ++i) {
-            int value = matrix[i / SIZE][i % SIZE];
+    }
+    bool digits[SIZE_SQR]{};
+    int step = 0;
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            int value = matrix[i][j];
             if (value != 0) {
-                ++d;
-                if (digits[value - 1]) {
+                ++step;
+                int index = value - 1;
+                if (digits[index]) {
                     throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
                 }
-                digits[value - 1] = true;
+                digits[index] = true;
             }
         }
-
-        int best1 = INT_MAX;
-        int best2 = INT_MIN;
-        BestResult res = next_step(matrix, digits, d, best1, best2, d);
-        return res;
     }
 
+    int best1 = INT_MAX;
+    int best2 = INT_MIN;
+    BestResult res = next_step(matrix, digits, step, best1, best2, true);
+    return res;
 }
+
 
 int solve_c_array() {
     int matrix[SIZE][SIZE]{};
@@ -203,19 +210,11 @@ int solve_c_array() {
 }
 
 BestResult solve_precompute() {
-    int matrix30[3][3]{};
-    int matrix3[3][3] =
-    {
-      {3, 9, 5},
-      {0, 8, 1},
-      {2, 4, 7}
+    std::vector<std::vector<int>> matrix = {
+      {0, 0, 0},
+      {0, 0, 0},
+      {0, 0, 0}
     };
 
-    int matrix2[2][2] =
-    {
-      {0, 1},
-      {3, 0}
-    };
-
-    return solve_matrix(matrix30);
+    return solve_matrix(matrix);
 }
