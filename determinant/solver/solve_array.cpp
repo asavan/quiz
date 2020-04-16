@@ -7,7 +7,7 @@ namespace {
     static constexpr int MINUS_INF = -500;
 
 
-    template <size_t _Size>
+    template <int _Size>
     int determinant(const std::array<std::array<int, _Size>, _Size>& a);
 
     template<>
@@ -30,7 +30,7 @@ namespace {
         return step % 2 == 0;
     }
 
-    int who_wins(std::array<std::array<int, SIZE>, SIZE> matrix, std::array<bool, SIZE_SQR> digits, int d, int best1, int best2) {
+    int who_wins(std::array<std::array<int, SIZE>, SIZE>& matrix, std::array<bool, SIZE_SQR>& digits, int d, int best1, int best2) {
 
         if (d == SIZE_SQR) {
             return determinant<SIZE>(matrix);

@@ -1,0 +1,225 @@
+a$ = 8
+int `anonymous namespace'::determinant<3>(int const (&)[3][3]) PROC ; `anonymous namespace'::determinant<3>, COMDAT
+        mov     QWORD PTR [rsp+8], rbx
+        mov     QWORD PTR [rsp+16], rsi
+        mov     QWORD PTR [rsp+24], rdi
+        mov     esi, DWORD PTR [rcx+24]
+        mov     r9d, DWORD PTR [rcx]
+        mov     edi, DWORD PTR [rcx+20]
+        mov     r10d, DWORD PTR [rcx+16]
+        mov     eax, r10d
+        mov     edx, DWORD PTR [rcx+12]
+        mov     ebx, edx
+        imul    ebx, DWORD PTR [rcx+28]
+        mov     r8d, DWORD PTR [rcx+32]
+        mov     r11d, DWORD PTR [rcx+4]
+        imul    eax, esi
+        sub     ebx, eax
+        mov     eax, r9d
+        imul    ebx, DWORD PTR [rcx+8]
+        imul    eax, edi
+        imul    r9d, r8d
+        imul    edi, r11d
+        imul    eax, DWORD PTR [rcx+28]
+        mov     ecx, r11d
+        imul    ecx, r8d
+        imul    edi, esi
+        mov     rsi, QWORD PTR [rsp+16]
+        imul    r9d, r10d
+        sub     ebx, eax
+        imul    ecx, edx
+        sub     ebx, ecx
+        lea     eax, DWORD PTR [r9+rbx]
+        mov     rbx, QWORD PTR [rsp+8]
+        add     eax, edi
+        mov     rdi, QWORD PTR [rsp+24]
+        ret     0
+int `anonymous namespace'::determinant<3>(int const (&)[3][3]) ENDP ; `anonymous namespace'::determinant<3>
+
+a$ = 8
+int `anonymous namespace'::determinant<2>(int const (&)[2][2]) PROC ; `anonymous namespace'::determinant<2>, COMDAT
+        mov     edx, DWORD PTR [rcx+8]
+        mov     eax, DWORD PTR [rcx+12]
+        imul    edx, DWORD PTR [rcx+4]
+        imul    eax, DWORD PTR [rcx]
+        sub     eax, edx
+        ret     0
+int `anonymous namespace'::determinant<2>(int const (&)[2][2]) ENDP ; `anonymous namespace'::determinant<2>
+
+step$ = 8
+bool `anonymous namespace'::is_first(int) PROC                    ; `anonymous namespace'::is_first, COMDAT
+        not     cl
+        and     cl, 1
+        mov     al, cl
+        ret     0
+bool `anonymous namespace'::is_first(int) ENDP                    ; `anonymous namespace'::is_first
+
+$T1 = 48
+$T2 = 56
+tv490 = 64
+matrix$ = 128
+digits$ = 136
+step$ = 144
+best1$ = 152
+best2$ = 160
+int `anonymous namespace'::who_wins(int (&)[3][3],bool (&)[9],int,int,int) PROC   ; `anonymous namespace'::who_wins, COMDAT
+        mov     QWORD PTR [rsp+8], rbx
+        mov     QWORD PTR [rsp+16], rbp
+        mov     QWORD PTR [rsp+24], rsi
+        push    rdi
+        push    r12
+        push    r13
+        push    r14
+        push    r15
+        sub     rsp, 80                             ; 00000050H
+        mov     ebx, r9d
+        mov     r13d, r8d
+        mov     rsi, rdx
+        mov     r12, rcx
+        cmp     r8d, 9
+        jne     SHORT $LN11@who_wins
+        mov     edx, DWORD PTR [rcx]
+        mov     r8d, DWORD PTR [rcx+12]
+        imul    r8d, DWORD PTR [rcx+28]
+        mov     r9d, DWORD PTR [rcx+20]
+        mov     eax, DWORD PTR [rcx+16]
+        imul    eax, DWORD PTR [rcx+24]
+        sub     r8d, eax
+        mov     eax, edx
+        imul    r8d, DWORD PTR [rcx+8]
+        imul    edx, DWORD PTR [r12+32]
+        imul    eax, r9d
+        imul    r9d, DWORD PTR [r12+4]
+        imul    edx, DWORD PTR [r12+16]
+        imul    eax, DWORD PTR [rcx+28]
+        mov     ecx, DWORD PTR [rcx+4]
+        imul    ecx, DWORD PTR [r12+32]
+        imul    r9d, DWORD PTR [r12+24]
+        sub     r8d, eax
+        imul    ecx, DWORD PTR [r12+12]
+        sub     r8d, ecx
+        lea     eax, DWORD PTR [rdx+r8]
+        add     eax, r9d
+        jmp     $LN1@who_wins
+$LN11@who_wins:
+        mov     r15d, DWORD PTR best2$[rsp]
+        xor     edx, edx
+        mov     ebp, edx
+        mov     edi, edx
+$LL4@who_wins:
+        cmp     BYTE PTR [rdi+rsi], dl
+        jne     $LN2@who_wins
+        mov     rax, r12
+        mov     BYTE PTR [rdi+rsi], 1
+        mov     QWORD PTR tv490[rsp], rax
+        mov     QWORD PTR $T2[rsp], rdx
+$LL7@who_wins:
+        mov     r14, rax
+        mov     QWORD PTR $T1[rsp], rdx
+        mov     rax, rdx
+$LL10@who_wins:
+        cmp     DWORD PTR [r14], edx
+        jne     SHORT $LN8@who_wins
+        lea     eax, DWORD PTR [rbp+1]
+        mov     DWORD PTR [rsp+32], r15d
+        lea     r8d, DWORD PTR [r13+1]
+        mov     DWORD PTR [r14], eax
+        mov     r9d, ebx
+        mov     rdx, rsi
+        mov     rcx, r12
+        call    int `anonymous namespace'::who_wins(int (&)[3][3],bool (&)[9],int,int,int) ; `anonymous namespace'::who_wins
+        mov     ecx, eax
+        mov     eax, r13d
+        and     eax, 1
+        jne     SHORT $LN14@who_wins
+        cmp     r15d, ecx
+        jge     SHORT $LN17@who_wins
+        mov     r15d, ecx
+        jmp     SHORT $LN17@who_wins
+$LN14@who_wins:
+        cmp     ebx, ecx
+        cmovg   ebx, ecx
+$LN17@who_wins:
+        xor     edx, edx
+        mov     DWORD PTR [r14], edx
+        test    eax, eax
+        je      SHORT $LN54@who_wins
+        cmp     ecx, r15d
+        jle     SHORT $LN19@who_wins
+        test    eax, eax
+        jne     SHORT $LN52@who_wins
+$LN54@who_wins:
+        cmp     ecx, ebx
+        jge     SHORT $LN19@who_wins
+$LN52@who_wins:
+        mov     rax, QWORD PTR $T1[rsp]
+$LN8@who_wins:
+        inc     rax
+        add     r14, 4
+        mov     QWORD PTR $T1[rsp], rax
+        cmp     rax, 3
+        jl      SHORT $LL10@who_wins
+        mov     rcx, QWORD PTR $T2[rsp]
+        mov     rax, QWORD PTR tv490[rsp]
+        inc     rcx
+        add     rax, 12
+        mov     QWORD PTR $T2[rsp], rcx
+        mov     QWORD PTR tv490[rsp], rax
+        cmp     rcx, 3
+        jl      $LL7@who_wins
+        mov     BYTE PTR [rdi+rsi], dl
+$LN2@who_wins:
+        inc     ebp
+        inc     rdi
+        cmp     rdi, 9
+        jl      $LL4@who_wins
+        test    r13b, 1
+        cmove   ebx, r15d
+        mov     eax, ebx
+$LN1@who_wins:
+        lea     r11, QWORD PTR [rsp+80]
+        mov     rbx, QWORD PTR [r11+48]
+        mov     rbp, QWORD PTR [r11+56]
+        mov     rsi, QWORD PTR [r11+64]
+        mov     rsp, r11
+        pop     r15
+        pop     r14
+        pop     r13
+        pop     r12
+        pop     rdi
+        ret     0
+$LN19@who_wins:
+        mov     eax, ebp
+        mov     BYTE PTR [rax+rsi], dl
+        mov     eax, ecx
+        jmp     SHORT $LN1@who_wins
+int `anonymous namespace'::who_wins(int (&)[3][3],bool (&)[9],int,int,int) ENDP   ; `anonymous namespace'::who_wins
+
+matrix$ = 48
+digits$ = 88
+__$ArrayPad$ = 104
+int solve_c_array(void) PROC                          ; solve_c_array, COMDAT
+$LN4:
+        sub     rsp, 120                      ; 00000078H
+        mov     rax, QWORD PTR __security_cookie
+        xor     rax, rsp
+        mov     QWORD PTR __$ArrayPad$[rsp], rax
+        xor     eax, eax
+        mov     DWORD PTR [rsp+32], -500      ; fffffffffffffe0cH
+        xorps   xmm0, xmm0
+        mov     DWORD PTR matrix$[rsp+32], eax
+        mov     r9d, 500                      ; 000001f4H
+        mov     QWORD PTR digits$[rsp], rax
+        xor     r8d, r8d
+        mov     BYTE PTR digits$[rsp+8], al
+        lea     rdx, QWORD PTR digits$[rsp]
+        lea     rcx, QWORD PTR matrix$[rsp]
+        movups  XMMWORD PTR matrix$[rsp], xmm0
+        movups  XMMWORD PTR matrix$[rsp+16], xmm0
+        call    int `anonymous namespace'::who_wins(int (&)[3][3],bool (&)[9],int,int,int) ; `anonymous namespace'::who_wins
+        mov     rcx, QWORD PTR __$ArrayPad$[rsp]
+        xor     rcx, rsp
+        call    __security_check_cookie
+        add     rsp, 120                      ; 00000078H
+        ret     0
+int solve_c_array(void) ENDP                          ; solve_c_array

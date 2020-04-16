@@ -5,7 +5,7 @@ namespace {
     static constexpr int INF = 500;
     static constexpr int MINUS_INF = -500;
 
-    template <size_t _Size>
+    template <int _Size>
     int determinant(const int(&a)[_Size][_Size]);
 
     template<>
