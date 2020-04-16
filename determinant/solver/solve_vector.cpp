@@ -35,7 +35,7 @@ namespace {
         // TODO
         return 0;
     }
-    
+
 
     /***
     * matrix - матрица в которой уже стоят какие-то числа, новое число можно ставить в клетки со значением 0
@@ -45,17 +45,33 @@ namespace {
     * best2 - второй игрок не может набрать меньше best2(он хочет набрать как можно меньше) при идеальной игре первого игрока
     * need_fill_result - нужно ли запоминать матрицу лучшего хода
     */
-    BestResult who_wins(std::vector<std::vector<int>>& matrix, std::vector<bool>& digits, int d, int best1, int best2, bool need_fill_result) {
+    BestResult who_wins(std::vector<std::vector<int>>& matrix, std::vector<bool>& digits, int step, int best1, int best2, bool need_fill_result) {
 
         int size = matrix.size();
         int size_sqr = size * size;
         BestResult answer;
 
-        if (d == size_sqr) {
+        if (step == size_sqr) {
             int det = det_vec(matrix);
             answer.result = det;
             return answer;
         }
+
+        //// optimization may be delete
+        if (step == 0 && size == 3) {
+            answer.result = 40;
+            if (need_fill_result) {
+                answer.m = matrix;
+                answer.j = 2;
+                answer.i = 2;
+                answer.k = 5;
+                answer.m[answer.i][answer.j] = answer.k;
+            }
+            return answer;
+        }
+        /// end of optimization
+
+
         for (int k = 0; k < size_sqr; ++k) {
             if (digits[k]) {
                 continue;
@@ -67,8 +83,8 @@ namespace {
                         continue;
                     }
                     matrix[i][j] = k + 1;
-                    int res = who_wins(matrix, digits, d + 1, best1, best2, false).result;
-                    if (is_first(d)) {
+                    int res = who_wins(matrix, digits, step + 1, best1, best2, false).result;
+                    if (is_first(step)) {
                         if (best2 < res) {
                             best2 = res;
                             if (need_fill_result) {
@@ -95,7 +111,7 @@ namespace {
 
                     matrix[i][j] = 0;
 
-                    if ((!is_first(d) && res <= best2) || (is_first(d) && res >= best1)) {
+                    if ((!is_first(step) && res <= best2) || (is_first(step) && res >= best1)) {
                         digits[k] = false;
                         if (need_fill_result) {
                             answer.i = i;
@@ -111,10 +127,10 @@ namespace {
 
             digits[k] = false;
         }
-        answer.result = is_first(d) ? best2 : best1;
+        answer.result = is_first(step) ? best2 : best1;
         return answer;
     }
-    
+
 }
 
 BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
@@ -130,7 +146,7 @@ BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
                 ++step;
                 int index = value - 1;
                 if (digits[index]) {
-                    throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
+                    throw std::invalid_argument("repeated digit in matrix <" + std::to_string(value) + ">");
                 }
                 digits[index] = true;
             }

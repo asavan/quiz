@@ -187,7 +187,7 @@ BestResult solve_matrix_c(const std::vector<std::vector<int>>& matrix_) {
                 ++step;
                 int index = value - 1;
                 if (digits[index]) {
-                    throw std::invalid_argument("reapited digit in matrix <" + std::to_string(value) + ">");
+                    throw std::invalid_argument("repeated digit in matrix <" + std::to_string(value) + ">");
                 }
                 digits[index] = true;
             }

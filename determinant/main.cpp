@@ -2,46 +2,51 @@
 #include <chrono>
 #include <iostream> 
 
-using namespace std::chrono;
 
-
-void mesure(BestResult(*f)(), const std::string& name)
+void m3()
 {
-    auto start = high_resolution_clock::now();
-    try {
-        BestResult res = f();
-        auto stop = high_resolution_clock::now();
+    std::vector<std::vector<int>> matrix = {
+      {0, 0, 0},
+      {0, 8, 0},
+      {0, 0, 0}
+    };
+    int size = matrix.size();
+    int size_sqr = size * size;
+    for (int i = 0; i < size_sqr; ++i) {
+        if (i == 4) {
+            continue;
+        }
+        int y = i / size;
+        int x = i % size;
+        matrix[y][x] = 1;
+        auto res = solve_matrix(matrix);
         res.print();
-        auto duration = duration_cast<milliseconds>(stop - start);
-        std::cout << name << " overall time in ms " << duration.count() << std::endl;
-    }
-    catch (const std::exception& ex) {
-        std::cerr << ex.what() << std::endl;
+        matrix[y][x] = 0;
     }
 }
 
-void mesure_int(int(*f)(), const std::string& name)
+void m2()
 {
-    auto start = high_resolution_clock::now();
-    int res = f();
+    std::vector<std::vector<int>> matrix = {
+      {0, 0},
+      {0, 0}
+    };
 
-    auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(stop - start);
+    int size = matrix.size();
+    int size_sqr = size * size;
 
-    std::cout << "Best res " << res << std::endl;
-    std::cout << name << " overall time in ms " << duration.count() << std::endl;
+    for (int i = 0; i < size_sqr; ++i) {
+        int y = i / size;
+        int x = i % size;
+        matrix[y][x] = 1;
+        auto res = solve_matrix(matrix);
+        res.print();
+        matrix[y][x] = 0;
+    }
 }
 
-int main()
-{
-    mesure_int(solve_array, "solve_array");
-    mesure_int(solve_c_array, "solve_c_array");
-    mesure_int(solve_vector_simple, "solve_vector_simple");
-    mesure(solve_precompute, "solve_precompute");
-    mesure(solve_vector, "solve_vector");
-    mesure_int(solve_array, "solve_array");
-    mesure_int(solve_vector_simple, "solve_vector_simple");
-    mesure_int(solve_c_array, "solve_c_array");
-
+int main() {
+    m3();
+    m2();
     return 0;
 }
