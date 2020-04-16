@@ -16,3 +16,6 @@ First Move |   Result
 7 | 14
 8 |  9
 9 |  -1
+
+
+Для получения асма юзался https://godbolt.org/
