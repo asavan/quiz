@@ -81,11 +81,60 @@ namespace {
             res3.print();
         }
     }
+
+    void case4() {
+        {
+            std::vector<std::vector<int>> matrix = {
+                                                  {0, 9, 0},
+                                                  {0, 5, 0},
+                                                  {0, 0, 0}
+            };
+
+            BestResult res = solve_matrix_flat(matrix);
+            test(40 == res.result);
+            res.print();
+        }
+        {
+            std::vector<std::vector<int>> matrix = {
+                                                  {1, 9, 0},
+                                                  {0, 5, 4},
+                                                  {0, 0, 0}
+            };
+
+            BestResult res = solve_matrix_flat(matrix);
+            test(40 == res.result);
+            res.print();
+        }
+        {
+            std::vector<std::vector<int>> matrix = {
+                                                  {1, 9, 0},
+                                                  {0, 5, 4},
+                                                  {0, 3, 2}
+            };
+
+            BestResult res = solve_matrix_flat(matrix);
+            test(40 == res.result);
+            res.print();
+        }
+        {
+            std::vector<std::vector<int>> matrix = {
+                                                  {1, 9, 6},
+                                                  {7, 5, 4},
+                                                  {0, 3, 2}
+            };
+
+            BestResult res = solve_matrix_flat(matrix);
+            test(46 == res.result);
+            res.print();
+        }
+
+
+
+    }
 }
 
 int main()
 {
-    case2();
-    case3();
+    case4();
     return 0;
 }
