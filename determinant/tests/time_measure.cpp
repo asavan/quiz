@@ -57,10 +57,22 @@ namespace {
 
     }
 
+    void case5()
+    {
+        std::vector<std::vector<int>> matrix = {
+          {0, 0, 0},
+          {0, 0, 0},
+          {0, 0, 0}
+        };
+
+        measure(solve_matrix_flat, "solve_matrix_flat", matrix);
+    }
+
+
 }
 
 int main() {
-    case3();
+    case5();
     return 0;
 }
 

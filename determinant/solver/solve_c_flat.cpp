@@ -40,9 +40,16 @@ namespace {
             return determinant<_Size>(matrix);
         }
 
+        bool used_first_digit = false;
         for (char k = 0; k < SIZE_SQR; ++k) {
             if (digits[k]) {
                 continue;
+            }
+            if (step == SIZE_SQR - 2) {
+                if (used_first_digit) {
+                    break;
+                }
+                used_first_digit = true;
             }
             digits[k] = true;
             for (char i = 0; i < SIZE_SQR; ++i) {
