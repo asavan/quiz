@@ -1,6 +1,4 @@
-#include <cstdio>
 #include "window.h"
-
 
 int main(int argc, char * argv[]) {
 	Window * w = createSimpleWindow();

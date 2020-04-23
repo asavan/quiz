@@ -1,6 +1,15 @@
-#include <cstdio>
-#include <iostream>
 #include "window.h"
+#include <iostream>
+
+class Window_With_Border : public Window
+{
+public:
+	Window_With_Border(Window* w);
+	virtual ~Window_With_Border();
+	virtual void draw() override;
+private:
+	Window* _w;
+};
 
 
 Window_With_Border::Window_With_Border(Window* w) : _w(w)
@@ -9,6 +18,7 @@ Window_With_Border::Window_With_Border(Window* w) : _w(w)
 
 Window_With_Border::~Window_With_Border()
 {
+	std::cout << "Window_With_Border deleted" << std::endl;
 }
 
 void Window_With_Border::draw() {
