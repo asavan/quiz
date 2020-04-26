@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by asavan on 24.09.2019.
+ * Wrong solution
  */
 public class LRU {
     public static class LRUCache<K, V>{
@@ -98,9 +98,14 @@ public class LRU {
                 currentSize++;
             }
         }
+        public void print() {
+            for (Map.Entry<K, Node<K, V>> entry : cache.entrySet()) {
+                System.out.println(entry.getKey() + " " + entry.getValue().value);
+            }
+        }
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         LRUCache<Integer, Integer> lru = new LRUCache<>(5);
         lru.get(2);
         lru.put(1, 11);
@@ -112,5 +117,23 @@ public class LRU {
         lru.get(2);
         lru.get(1);
         lru.put(6, 66);
+    }
+
+    public static void main(String[] args) {
+        // your code goes here
+        LRUCache<Integer, Integer> lrucache = new LRUCache<>(4);
+        lrucache.put(1, 1);
+        lrucache.put(10, 15);
+        lrucache.put(15, 10);
+        lrucache.put(10, 16);
+        lrucache.put(12, 15);
+        lrucache.put(18, 10);
+        lrucache.put(13, 16);
+
+        System.out.println(lrucache.get(1));
+        System.out.println(lrucache.get(10));
+        System.out.println(lrucache.get(15));
+
+        lrucache.print();
     }
 }
