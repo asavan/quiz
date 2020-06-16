@@ -1,3 +1,5 @@
+package ya;
+
 import java.util.HashMap;
 import java.util.Map;
 

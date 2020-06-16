@@ -100,7 +100,7 @@ public class LRU4 {
         }
 
     }
-    public static void main(String[] args) throws java.lang.Exception {
+    public static void main(String[] args) {
         // your code goes here
         LRUCache lrucache = new LRUCache(4);
         lrucache.put(1, 1);

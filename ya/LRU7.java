@@ -29,6 +29,12 @@ public class LRU7 {
             map.put(key, value);
         }
 
+        public void print() {
+            for (Map.Entry<Integer, Integer> integerEntryEntry : map.entrySet()) {
+                System.out.println(integerEntryEntry.getKey() + " " + integerEntryEntry.getValue());
+            }
+        }
+
     }
     public static void main(String[] args) throws java.lang.Exception {
         // your code goes here
@@ -44,7 +50,7 @@ public class LRU7 {
         System.out.println(lrucache.get(1));
         System.out.println(lrucache.get(10));
         System.out.println(lrucache.get(15));
-        // lrucache.print();
+        lrucache.print();
 
     }
 }
