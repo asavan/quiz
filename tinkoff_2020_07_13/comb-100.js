@@ -4,9 +4,9 @@ function addSymbol(last, position) {
     }
     let sum = 0;
     if (last === 0) {
-        sum += addSymbol(position, position+ 2);
+        sum += addSymbol(position, position + 2);
     }
-    sum += addSymbol(0, position+ 2);
+    sum += addSymbol(0, position + 2);
     return sum;
 }
 

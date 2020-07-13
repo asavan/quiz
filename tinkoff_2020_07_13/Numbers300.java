@@ -9,18 +9,18 @@ public class Numbers300 {
         int r2 = modulo(2, 100, 10000);
         System.out.println(r1);
         System.out.println(r2);
-        System.out.println((r1-r2)/2);
+        System.out.println((r1 + r2) / 2 % 1000);
     }
 
-    public static int modulo(int a, int b, int n){
-        long x=1, y=a;
+    public static int modulo(int a, int b, int n) {
+        long x = 1, y = a;
         while (b > 0) {
-            if (b%2 == 1) {
-                x = (x*y) % n; // multiplying with base
+            if (b % 2 == 1) {
+                x = (x * y) % n; // multiplying with base
             }
-            y = (y*y) % n; // squaring the base
+            y = (y * y) % n; // squaring the base
             b /= 2;
         }
-        return (int)x % n;
+        return (int) x % n;
     }
 }

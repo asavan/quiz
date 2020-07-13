@@ -13,18 +13,18 @@ public class Terver200 {
             }
         }
         System.out.println(count);
-        System.out.println(count* 1000/ Math.pow(10, 6));
+        System.out.println(count * 1000 / Math.pow(10, 6));
     }
 
-    public static int modulo(int a, int b, int n){
-        long x=1, y=a;
+    public static int modulo(int a, int b, int n) {
+        long x = 1, y = a;
         while (b > 0) {
-            if (b%2 == 1) {
-                x = (x*y) % n; // multiplying with base
+            if (b % 2 == 1) {
+                x = (x * y) % n; // multiplying with base
             }
-            y = (y*y) % n; // squaring the base
+            y = (y * y) % n; // squaring the base
             b /= 2;
         }
-        return (int)x % n;
+        return (int) x % n;
     }
 }
