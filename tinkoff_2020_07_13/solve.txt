@@ -1,0 +1,8 @@
+https://www.wolframalpha.com/input/?i=sum+3%5E%282*k%29*C%28100%2C+2k%29+k+%3D+0+to+50
+
+10+11+33+54 = 108
+
+https://www.wolframalpha.com/input/?i=round%5Bsum+sqrt%28k%2B10%5E20%29+k+%3D+1+to+2*10%5E10%5D
+200000000010000000000
+
+https://www.wolframalpha.com/input/?i=%285*pi%2F2%2Bsqrt%283%29%29*4 (геом)  38
