@@ -1,5 +1,5 @@
 function addSymbol(last, position) {
-    if (position === 14) {
+    if (position > 14) {
         return 1;
     }
     let sum = 0;
@@ -10,4 +10,6 @@ function addSymbol(last, position) {
     return sum;
 }
 
-console.log(addSymbol(0, 2));
+let res = addSymbol(0, 2);
+// console.log(res);
+console.log(2**8 * res);

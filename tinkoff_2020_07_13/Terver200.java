@@ -6,25 +6,25 @@ package tinkoff_2020_07_13;
 public class Terver200 {
     public static void main(String[] args) {
         int count = 0;
-        for (int i = 1; i <= Math.pow(10, 6); ++i) {
-            int m = modulo(i, 40, 100);
+        int i;
+        for (i = 0; i < Math.pow(10, 6); ++i) {
+            int m = modulo(i + 1, 40, 100);
             if (m == 1) {
                 ++count;
             }
         }
-        System.out.println(count);
-        System.out.println(count * 1000 / Math.pow(10, 6));
+        System.out.println(count * 100. / i);
     }
 
-    public static int modulo(int a, int b, int n) {
+    private static int modulo(int a, int pow, int mod) {
         long x = 1, y = a;
-        while (b > 0) {
-            if (b % 2 == 1) {
-                x = (x * y) % n; // multiplying with base
+        while (pow > 0) {
+            if (pow % 2 == 1) {
+                x = (x * y) % mod; // multiplying with base
             }
-            y = (y * y) % n; // squaring the base
-            b /= 2;
+            y = (y * y) % mod; // squaring the base
+            pow /= 2;
         }
-        return (int) x % n;
+        return (int) x % mod;
     }
 }
