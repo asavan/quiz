@@ -11,10 +11,10 @@
 
 
 <script>
-    WebAssembly.instantiateStreaming(fetch('test.wasm'))
+    WebAssembly.instantiateStreaming(fetch('WasmExplorerC2.wasm'))
         .then(obj => {
             // let mem = obj.instance.exports.memory(256);
-            let res = obj.instance.exports.solve_matrix_web(90054001);
+            let res = obj.instance.exports.solve_matrix_web(5);
             console.log(res);
             const amount = res % 1000;
             res -= amount;

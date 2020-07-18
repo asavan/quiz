@@ -233,7 +233,7 @@ function isDataURI(filename) {
     return hasPrefix(filename, dataURIPrefix)
 }
 
-var wasmBinaryFile = "solve_web7.wasm";
+var wasmBinaryFile = "WasmExplorerC2.wasm";
 if (!isDataURI(wasmBinaryFile)) {
     wasmBinaryFile = locateFile(wasmBinaryFile)
 }

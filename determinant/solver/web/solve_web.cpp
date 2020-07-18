@@ -206,10 +206,3 @@ int solve_matrix_web(int matrixNum) {
 #ifdef __cplusplus
 }
 #endif
-
-
-#include <iostream>
-int main(int matrixNum)
-{
-    std::cout << solve_matrix_web(90054000)<< std::endl;
-}

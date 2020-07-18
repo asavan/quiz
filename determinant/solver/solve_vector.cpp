@@ -135,7 +135,7 @@ namespace {
 
 BestResult solve_matrix(const std::vector<std::vector<int>>& matrix_) {
     std::vector<std::vector<int>> matrix = matrix_;
-    int size = matrix.size();
+    char size = matrix.size();
 
     std::vector<bool> digits(size * size, false);
     int step = 0;

@@ -17,7 +17,7 @@ static inline int getResult(char i, char k, short res) {
 
 static inline short determinant() {
     return
-        (short)matrix[0] * matrix[4] * matrix[8] +
+        matrix[0] * matrix[4] * matrix[8] +
         matrix[6] * matrix[1] * matrix[5] +
         matrix[3] * matrix[7] * matrix[2]
         - matrix[2] * matrix[4] * matrix[6]
@@ -76,7 +76,7 @@ static short who_wins(char step, short best1, short best2) {
 }
 
 static int next_step(char step, short best1, short best2) {
-    int answer = -INF;
+    int answer = INF;
 
     for (char k = 0; k < SIZE_SQR; ++k) {
         if (digits[k]) {
@@ -88,26 +88,20 @@ static int next_step(char step, short best1, short best2) {
                 continue;
             }
             matrix[i] = k + 1;
-            // int res = next_step(matrix, digits, d + 1, best1, best2, false).result;
             short res = who_wins(step + 1, best1, best2);
 
-            char need_feel_matrix = 0;
             if (is_first(step)) {
                 if (best2 < res) {
                     best2 = res;
-                    need_feel_matrix = 1;
+                    answer = getResult(i, k, res);
                 }
             }
             else {
                 if (best1 > res) {
                     best1 = res;
-                    need_feel_matrix = 1;
+                    answer = getResult(i, k, res);
                 }
             }
-            if (need_feel_matrix) {
-                answer = getResult(i, k, res);
-            }
-
             matrix[i] = 0;
         }
 
@@ -120,6 +114,9 @@ static int next_step(char step, short best1, short best2) {
 int solve_matrix_web(int matrixNum) {
     char step = 0;
     for (int i = SIZE_SQR - 1; i >= 0; --i) {
+        digits[i] = 0;
+    }
+    for (int i = SIZE_SQR - 1; i >= 0; --i) {
         char digit = matrixNum % 10;
         matrix[i] = digit;
         matrixNum /= 10;
@@ -129,10 +126,4 @@ int solve_matrix_web(int matrixNum) {
         }
     }
     return next_step(step, INF, MINUS_INF);
-}
-
-#include <stdio.h>
-int main(int matrixNum)
-{
-    printf("%d", solve_matrix_web(90054000));
 }
