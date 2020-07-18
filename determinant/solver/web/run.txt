@@ -1,0 +1,16 @@
+emcc solve_web.cpp -Os -s WASM=1 -s SIDE_MODULE=1 -o hello_world2.wasm
+emcc solve_web.cpp -Os -s WASM=1 -s SIDE_MODULE=1 -o hello_world2.wasm -s EXPORTED_FUNCTIONS=["_solve_matrix_web"] 
+
+
+emcc solve_web.cpp -Os -s STANDALONE_WASM --no-entry
+
+emcc solve_web.cpp -Oz -s STANDALONE_WASM -s EXPORTED_FUNCTIONS=["_solve_matrix_web"]
+
+
+emcc solve_web.cpp -Oz -s STANDALONE_WASM -s EXPORTED_FUNCTIONS=["_solve_matrix_web"] -s ENVIRONMENT=web -o sss.html
+
+
+emcc solve_web.cpp -Os -s EXPORTED_FUNCTIONS=["_solve_matrix_web"] -o s5.wasm
+
+
+emcc solve_web.cpp -Oz -s EXPORTED_FUNCTIONS=["_solve_matrix_web"] -o s8.wasm

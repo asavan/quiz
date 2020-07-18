@@ -9,3 +9,5 @@ set(SOURCES solve_array.cpp
 set(HEADERS solver.h)
 
 add_library(solverlib STATIC ${SOURCES} ${HEADERS})
+add_executable(solverweb web/solve_web.cpp)
+add_executable(solverwebc web/solve_web.c)

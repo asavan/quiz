@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.18)
 
 # SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall -Wextra -pedantic")
 
 
 project(determinant)
+
+set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 
 add_subdirectory(solver)
 add_subdirectory(measure)
