@@ -127,6 +127,17 @@ namespace {
             test(46 == res.result);
             res.print();
         }
+        {
+            std::vector<std::vector<int>> matrix = {
+                                                  {1, 0, 0},
+                                                  {0, 0, 0},
+                                                  {0, 0, 0}
+            };
+
+            BestResult res = solve_matrix_flat(matrix);
+            test(-33 == res.result);
+            res.print();
+        }
 
 
 

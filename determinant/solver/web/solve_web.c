@@ -8,11 +8,25 @@ static inline char is_first(int step) {
     return step % 2 == 0;
 }
 
+static inline int sign(short res) {
+    if (res < 0) {
+        return -1;
+    }
+    return 1;
+}
+
+static inline abs(short res) {
+    if (res < 0) {
+        return -res;
+    }
+    return res;
+}
+
 static inline int getResult(char i, char k, short res) {
-    int ans = res;
-    ans += i * 1000;
-    ans += k * 10000;
-    return ans;
+    int ans = i;
+    ans += k * 10;
+    ans += abs(res) * 100;
+    return sign(res) * ans;
 }
 
 static inline short determinant() {

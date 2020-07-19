@@ -197,9 +197,9 @@ extern "C" {
 #endif
 int solve_matrix_web(int matrixNum) {
     BestResult res =  solve_matrix_flat2_<3>(matrixNum);
-    int ans = res.result;
-    ans += res.i * 1000;
-    ans += res.k * 10000;
+    int ans = res.i;
+    ans += res.k * 10;
+    ans += res.result * 100;
     return ans;
 }
 
