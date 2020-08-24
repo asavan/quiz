@@ -7,6 +7,7 @@ public class T5 {
         public int v1;
         public int v2;
     }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
@@ -21,7 +22,7 @@ public class T5 {
             eges[i] = new Request();
             eges[i].v1 = scanner.nextInt();
             eges[i].v2 = scanner.nextInt();
-            addEdge(adj, eges[i].v1-1, eges[i].v2-1);
+            addEdge(adj, eges[i].v1 - 1, eges[i].v2 - 1);
         }
         int q = scanner.nextInt();
 
@@ -33,7 +34,7 @@ public class T5 {
         }
 
         for (Request request : requests) {
-            System.out.println(shortestDistance(adj, request.v1-1, request.v2-1, n));
+            System.out.println(shortestDistance(adj, request.v1 - 1, request.v2 - 1, n));
         }
     }
 

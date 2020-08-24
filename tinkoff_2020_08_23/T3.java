@@ -76,28 +76,28 @@ public class T3 {
         return (dest.x - v1.x) * vy + (v1.y - dest.y) * vx;
     }
 
-    private static int area (Vertex a, Vertex b, Vertex c) {
+    private static int area(Vertex a, Vertex b, Vertex c) {
         return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
     }
 
-    private static boolean intersect_1 (int a, int b, int c, int d) {
-        if (a > b)  {
+    private static boolean intersect_1(int a, int b, int c, int d) {
+        if (a > b) {
             int temp = a;
             a = b;
             b = temp;
         }
-        if (c > d)  {
+        if (c > d) {
             int temp = c;
             c = d;
             d = temp;
         }
-        return max(a,c) <= min(b,d);
+        return max(a, c) <= min(b, d);
     }
 
-    private static boolean intersect (Vertex a, Vertex b, Vertex c, Vertex d) {
-        return intersect_1 (a.x, b.x, c.x, d.x)
-                && intersect_1 (a.y, b.y, c.y, d.y)
-                && area(a,b,c) * area(a,b,d) <= 0
-                && area(c,d,a) * area(c,d,b) <= 0;
+    private static boolean intersect(Vertex a, Vertex b, Vertex c, Vertex d) {
+        return intersect_1(a.x, b.x, c.x, d.x)
+                && intersect_1(a.y, b.y, c.y, d.y)
+                && area(a, b, c) * area(a, b, d) <= 0
+                && area(c, d, a) * area(c, d, b) <= 0;
     }
 }

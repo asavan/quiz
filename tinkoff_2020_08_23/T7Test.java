@@ -6,9 +6,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Created by asavan on 24.08.2020.
- */
 class T7Test {
     List<Integer> arr;
 

@@ -34,20 +34,20 @@ public class T7 {
         }
     }
 
-    public static void maxDiffCalc(List<Integer> arr) {
-        for (int j = 1; j < arr.size(); j++) {
-            int diff = 0;
-            int maxIndex = -1;
-            for (int i = 0; i + j < arr.size(); i++) {
-                int b = arr.get(i + j) - arr.get(i);
-                if (diff < b) {
-                    diff = b;
-                    maxIndex = i;
-                }
-            }
-            System.out.println(j + " " + diff + " " + maxIndex + " " + arr.get(maxIndex) + " " + arr.get(maxIndex + j));
-        }
-    }
+//    public static void maxDiffCalc(List<Integer> arr) {
+//        for (int j = 1; j < arr.size(); j++) {
+//            int diff = 0;
+//            int maxIndex = -1;
+//            for (int i = 0; i + j < arr.size(); i++) {
+//                int b = arr.get(i + j) - arr.get(i);
+//                if (diff < b) {
+//                    diff = b;
+//                    maxIndex = i;
+//                }
+//            }
+//            System.out.println(j + " " + diff + " " + maxIndex + " " + arr.get(maxIndex) + " " + arr.get(maxIndex + j));
+//        }
+//    }
 
     public static List<Integer> getPrimesAndBounds() {
         List<Integer> arr = new ArrayList<>(9594);
@@ -81,21 +81,21 @@ public class T7 {
 //            }
 //            return -1;
 //        }
-//        if (request.C == 0) {
-//            if (request.K > 0 && request.K < 72) {
-//                return 31398;
-//            }
-//            return -1;
-//        }
-//        if (request.C == 1) {
-//            if (request.K < 72) {
-//                return 31397;
-//            }
-//            if (request.K < 100) {
-//                return 58790;
-//            }
-//            return -1;
-//        }
+        if (request.C == 0) {
+            if (request.K < 72) {
+                return 31398;
+            }
+            return -1;
+        }
+        if (request.C == 1) {
+            if (request.K < 72) {
+                return 31397;
+            }
+            if (request.K < 100) {
+                return 58790;
+            }
+            return -1;
+        }
 
         for (int i = 1; i < arr.size(); i++) {
             if (i + request.C >= arr.size()) {

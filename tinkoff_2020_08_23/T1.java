@@ -15,11 +15,11 @@ public class T1 {
     }
 
     private static int collatz(long n) {
-        if (n==1) {
+        if (n == 1) {
             return 0;
         }
 
-        int x=0;
+        int x = 0;
 
         do {
             if (n % 2 == 0) {

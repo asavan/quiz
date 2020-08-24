@@ -14,7 +14,7 @@ public class T2 {
         System.out.println(cycles);
     }
 
-    private static long findCycles(int p[], int n) {
+    private static long findCycles(int[] p, int n) {
         boolean[] used = new boolean[n];
         Set<Integer> set = new TreeSet<>();
         for (int i = 0; i < n; ++i) {
