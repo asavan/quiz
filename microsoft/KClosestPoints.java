@@ -1,6 +1,7 @@
 package microsoft;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -25,6 +26,10 @@ public class KClosestPoints {
             return x*x;
         }
 
+        public double Distance(Point other) {
+            return Math.sqrt(squareDistance(other));
+        }
+
         @Override
         public String toString() {
             return "( " + x + ", " + y + " )";
@@ -34,9 +39,9 @@ public class KClosestPoints {
     public static void main(String[] args) {
         List<Point> input = new ArrayList<>();
         input.add(new Point(1, 1));
-        input.add(new Point(1, -1));
         input.add(new Point(2, 2));
         input.add(new Point(-1, 1));
+        input.add(new Point(1, -1));
         input.add(new Point(-2, 2));
         input.add(new Point(5, -5));
         input.add(new Point(-8, 6));
@@ -51,7 +56,7 @@ public class KClosestPoints {
     }
 
     private static List<Point> kClosest(List<Point> input, Point vertex, int k) {
-        PriorityQueue<Point> queue = new PriorityQueue<>(k+1, (o1, o2) -> o2.squareDistance(vertex) - o1.squareDistance(vertex));
+        PriorityQueue<Point> queue = new PriorityQueue<>(k+1, Comparator.comparingInt(o -> -o.squareDistance(vertex)));
         for (Point point : input) {
             queue.add(point);
             if (queue.size() > k) {
