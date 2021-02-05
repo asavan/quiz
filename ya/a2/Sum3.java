@@ -1,4 +1,4 @@
-package ya;
+package ya.a2;
 
 import static java.util.Arrays.sort;
 

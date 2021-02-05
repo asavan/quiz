@@ -1,4 +1,4 @@
-package ya;
+package ya.a1;
 
 /**
  * Created by asavan on 05.02.2021.
