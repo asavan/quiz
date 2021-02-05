@@ -5,12 +5,14 @@ import java.util.*;
 public class HexSum {
 
     public static void main(String[] argv) {
+        System.out.println(sum("F", "1"));
         System.out.println("1000".equals(sum("fed", "13")));
         System.out.println("23".equals(sum("13", "10")));
         System.out.println("0".equals(sum("0", "0")));
         System.out.println("10".equals(sum("10", "0")));
         System.out.println("10".equals(sum("10", "")));
-
+        System.out.println("1fe".equals(sum("FF", "FF")));
+        System.out.println("100000".equals(sum("FFFFF", "1")));
     }
 
     public static String sum(String hex1, String hex2) {
@@ -43,7 +45,8 @@ public class HexSum {
         return (char) ('a' + sum - 10);
     }
 
-    public static int fromHex(char c) {
+    public static int fromHex(char input) {
+        char c = Character.toLowerCase(input);
         if (c >= 'a' && c < 'g') return c - 'a' + 10;
         return c - '0';
     }
