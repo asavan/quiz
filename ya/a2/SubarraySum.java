@@ -68,6 +68,11 @@ public class SubarraySum {
             int [] arr = {-10, 0, 2, -2, -20, 10};
             assertNull(subarraySum(arr, 20));
         }
+        {
+            int [] arr =  {1, 2, 3, 0, 4, 5};
+            assertEquals(new SubArray(2, 4), subarraySum(arr, 7));
+            assertEquals(new SubArray(0, 0), subarraySum(arr, 1));
+        }
     }
 
     private static SubArray subarraySum(int[] input, int target) {
