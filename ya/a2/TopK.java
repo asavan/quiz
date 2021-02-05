@@ -1,4 +1,4 @@
-package ya;
+package ya.a2;
 
 import org.junit.Test;
 

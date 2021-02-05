@@ -1,4 +1,4 @@
-// HOLY SHIT, NO AUTOCOMPLETE ?
+package ya.a1;// HOLY SHIT, NO AUTOCOMPLETE ?
 
 import java.util.*;
 
