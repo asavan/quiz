@@ -11,6 +11,8 @@ public class Palindrome {
     public static void main(String[] args) {
         boolean res = isPalindrome("'А роза упала на лапу Азора'");
         System.out.println(res);
+        System.out.println(Character.isJavaIdentifierStart('_'));
+        System.out.println(Character.isAlphabetic('_'));
     }
 
     @Test
