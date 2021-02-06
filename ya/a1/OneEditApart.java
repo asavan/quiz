@@ -26,29 +26,23 @@ public class OneEditApart {
     }
 
     private static boolean oneEditApart(String first, String second) {
-        String small = first.length() <= second.length() ? first : second;
-        String big = first.length() > second.length() ? first : second;
-        if (big.length() - small.length() > 1) {
-            return false;
+        final String small;
+        final String big;
+        if (first.length() <= second.length()) {
+            small = first;
+            big = second;
+        } else {
+            small = second;
+            big = first;
         }
-        if (big.length() == small.length()) {
-            int diff = 0;
-            for (int i = 0; i < small.length(); i++) {
-                char s = small.charAt(i);
-                char b = big.charAt(i);
-                if (s != b) {
-                    ++diff;
-                }
-                if (diff > 1) {
-                    return false;
-                }
-            }
-            return true;
+        int lenDiff = big.length() - small.length();
+        if (lenDiff > 1) {
+            return false;
         }
         int diff = 0;
         for (int i = 0; i < small.length(); i++) {
             char s = small.charAt(i);
-            char b = big.charAt(i+diff);
+            char b = big.charAt(i + Math.min(diff, lenDiff));
             if (s != b) {
                 ++diff;
             }
