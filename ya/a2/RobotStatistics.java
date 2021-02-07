@@ -9,13 +9,13 @@ import java.util.Queue;
  * Created by asavan on 06.02.2021.
  */
 public class RobotStatistics {
-    public RobotStatistics(int threashold, int timeLimit) {
-        this.threashold = threashold;
+    public RobotStatistics(int threshold, int timeLimit) {
+        this.threshold = threshold;
         this.timeLimit = timeLimit;
         robotsCount = 0;
     }
 
-    private final int threashold;
+    private final int threshold;
     private final int timeLimit;
 
     private static class Event {
@@ -37,7 +37,7 @@ public class RobotStatistics {
         Event e = new Event(now, userId);
         queue.add(e);
         Integer newCount = userToCount.merge(userId, 1, Integer::sum);
-        if (newCount.equals(threashold)) {
+        if (newCount.equals(threshold)) {
             ++robotsCount;
         }
     }
@@ -48,7 +48,7 @@ public class RobotStatistics {
             if (e.time + timeLimit < now) {
                 queue.poll();
                 Integer newCount = userToCount.merge(e.userId, -1, Integer::sum);
-                if (newCount.equals(threashold - 1)) {
+                if (newCount.equals(threshold - 1)) {
                     --robotsCount;
                 }
                 if (newCount.equals(0)) {
