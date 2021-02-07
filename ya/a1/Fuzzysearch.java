@@ -16,26 +16,30 @@ public class Fuzzysearch {
 
     @Test
     public void test() {
-        assertTrue( fuzzysearch("cat", "abcaerrtpiller"));
+        assertTrue(fuzzysearch("cat", "abcaerrtpiller"));
         assertTrue(fuzzysearch("car", "cartwheel"));        // true
         assertTrue(fuzzysearch("cwhl", "cartwheel"));       // true
         assertTrue(fuzzysearch("cwheel", "cartwheel"));     // true
         assertTrue(fuzzysearch("cartwheel", "cartwheel"));  // true
         assertFalse(fuzzysearch("cwheeel", "cartwheel"));    // false
         assertFalse(fuzzysearch("lw", "cartwheel"));
+        assertTrue(fuzzysearch("", "cartwheel"));
+        assertTrue(fuzzysearch("t", "cartwheel"));
     }
 
     private static boolean fuzzysearch(String search, String text) {
+        if (search.isEmpty()) {
+            return true;
+        }
         int i = 0;
-        int j = 0;
-        for (;j < text.length(); ++j) {
+        for (int j = 0; j < text.length(); ++j) {
             char s = search.charAt(i);
             char t = text.charAt(j);
             if (s == t) {
                 ++i;
-            }
-            if (i == search.length()) {
-                return true;
+                if (i == search.length()) {
+                    return true;
+                }
             }
         }
         return false;
