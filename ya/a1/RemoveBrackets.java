@@ -36,25 +36,23 @@ public class RemoveBrackets {
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
             switch (state) {
-                case DEFAULT : {
+                case DEFAULT -> {
                     if (c == ':') {
                         state = State.COLON;
                     } else {
                         b.append(c);
                     }
-                    break;
                 }
-                case COLON: {
+                case COLON -> {
                     if (c == '-') {
                         state = State.TIRE;
                     } else {
-                        b.append(":");
+                        b.append(':');
                         state = State.DEFAULT;
                         --i;
                     }
-                    break;
                 }
-                case TIRE : {
+                case TIRE -> {
                     if (c == ')') {
                         state = State.CLOSED;
                     } else if (c == '(') {
@@ -63,16 +61,14 @@ public class RemoveBrackets {
                         b.append(":-");
                         --i;
                     }
-                    break;
                 }
-                case OPEN: {
+                case OPEN -> {
                     if (c != '(') {
                         state = State.DEFAULT;
                         --i;
                     }
-                    break;
                 }
-                case CLOSED: {
+                case CLOSED -> {
                     if (c != ')') {
                         state = State.DEFAULT;
                         --i;
