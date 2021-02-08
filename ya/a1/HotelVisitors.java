@@ -31,11 +31,17 @@ public class HotelVisitors {
             return 0;
         }
         Map<Integer, Integer> dayToVisitors = new TreeMap<>();
+        int max = 0;
+        int summ = 0;
         for (Days visitor : visitors) {
             dayToVisitors.merge(visitor.begin, 1, Integer::sum);
             dayToVisitors.merge(visitor.end, -1, Integer::sum);
         }
-        return Collections.max(dayToVisitors.values());
+        for (Integer value : dayToVisitors.values()) {
+            summ += value;
+            max = Math.max(max, summ);
+        }
+        return max;
     }
 
     @Test
@@ -43,6 +49,6 @@ public class HotelVisitors {
         assertEquals(0, maxVisitors(Collections.emptyList()));
         assertEquals(1, maxVisitors(Arrays.asList(new Days(1, 2))));
         assertEquals(1, maxVisitors(Arrays.asList(new Days(1, 2), new Days(2, 3))));
-        assertEquals(1, maxVisitors(Arrays.asList(new Days(1, 5), new Days(0, 1), new Days(4, 5))));
+        assertEquals(2, maxVisitors(Arrays.asList(new Days(1, 5), new Days(0, 1), new Days(4, 5))));
     }
 }
