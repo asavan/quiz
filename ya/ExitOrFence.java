@@ -7,7 +7,7 @@
 /**
  * Created by asavan on 24.11.2016.
  */
-public class Test2 {
+public class ExitOrFence {
     public static void main(String[] args) {
         int[][] map = {
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
