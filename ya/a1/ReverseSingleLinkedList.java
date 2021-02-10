@@ -3,7 +3,7 @@ package ya.a1;
 /**
  * Created by asavan on 05.02.2021.
  */
-public class SingleLinkedList {
+public class ReverseSingleLinkedList {
     static class Node {
         public int value;
         public Node next;
