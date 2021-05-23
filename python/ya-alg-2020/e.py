@@ -3,7 +3,7 @@ def E():
     from collections import defaultdict
 
     def longest_branch(graph, start, visited=None):
-        t = time()
+        # t = time()
         if visited is None:
             visited = set()
         queue = [(start, 1), ]
@@ -22,7 +22,7 @@ def E():
             branch.append(root)
             visited.add(root)
 
-        print(time() - t)
+        # print(time() - t)
         if len(branch) > len(res):
             return branch
         else:

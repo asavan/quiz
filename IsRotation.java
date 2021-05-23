@@ -34,6 +34,29 @@ public class IsRotation {
         return (s1.length() == s2.length()) && ((s1 + s1).contains(s2));
     }
 
+    public static boolean isRotation3(String u, String v) {
+        int n = u.length();
+        int i = -1;
+        int j = -1;
+        if (n != v.length()) return false;
+
+        while (i < n - 1 && j < n - 1) {
+            int k = 1;
+            while (k <= n && u.charAt((i + k) % n) == v.charAt((j + k) % n)) {
+                k++;
+            }
+            if (k > n) {
+                return true;
+            }
+            if (u.charAt((i + k) % n) > v.charAt((j + k) % n)) {
+                i += k;
+            } else {
+                j += k;
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         check(isRotation("tackoverflows", "ackoverflowst"));
         check(isRotation("tackoverflows", "overflowstack"));
