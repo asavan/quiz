@@ -34,6 +34,16 @@ public class Normalizer {
         assertEquals("/etc", normalize("/////documents/root/.././../etc"));
         assertEquals("etc", normalize("./config/../etc"));
         assertEquals("/etc", normalize("/etc/"));
+        assertEquals("foo", normalize("foo"));
+        assertEquals("bar", normalize("bar"));
+        assertEquals(".", normalize(""));
+        assertEquals("/zog", normalize("/../../../zog"));
+        assertEquals("../../../zog", normalize("./../../../zog"));
+        assertEquals(".", normalize("."));
+        assertEquals(".", normalize("zog/.."));
+        assertEquals("/", normalize("//"));
+        assertEquals("../b", normalize("a/..///../b"));
+        assertEquals("foo/bar", normalize("foo/./bar"));
     }
 
     @Test
@@ -48,32 +58,38 @@ public class Normalizer {
     }
 
     private static String normalize(String path) {
+        if (path.length() == 0) {
+            return CURRENT_LEVEL;
+        }
         String[] paths = path.split(DELIMITER);
-        boolean isRoot = false;
+        boolean isRoot = path.charAt(0) == '/';
 
-        if (paths.length == 0) {
-            throw new IllegalArgumentException("Wrong path");
-        }
-        if (ROOT.equals(paths[0])) {
-            isRoot = true;
-        }
         Deque<String> normalized = new ArrayDeque<>();
         for (String subpath : paths) {
-            processOneLevel(normalized, subpath);
+            processOneLevel(normalized, subpath, isRoot);
         }
         if (isRoot) {
             normalized.addFirst(ROOT);
+            if (normalized.size() == 1) {
+                normalized.addFirst(ROOT);
+            }
+        }
+        if (normalized.isEmpty()) {
+            return CURRENT_LEVEL;
         }
         return String.join(DELIMITER, normalized);
     }
 
-    private static void processOneLevel(Deque<String> normalized, String subpath) {
+    private static void processOneLevel(Deque<String> normalized, String subpath, boolean isRoot) {
         if (subpath.equals(CURRENT_LEVEL) || subpath.equals(ROOT)) {
             return;
         }
         if (subpath.equals(LEVEL_UP)) {
-            if (!normalized.isEmpty()) {
+            if (!normalized.isEmpty() && !LEVEL_UP.equals(normalized.peekLast())) {
                 normalized.pollLast();
+                return;
+            }
+            if (isRoot) {
                 return;
             }
         }
