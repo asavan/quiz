@@ -3,16 +3,14 @@ package ya;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Iterator;
 
-/**
- * Wrong solution
- */
-public class LRU5 {
+public class LRU8 {
     static class LRUCache {
 
         private final int capacity;
 
-        private final Map<Integer, Node> map;
+        private final Map<Integer, Iterator<Node>> map;
 
         private final LinkedList<Node> list;
 
@@ -33,38 +31,40 @@ public class LRU5 {
         }
 
         public int get(int key) {
-
             if (!map.containsKey(key)) {
                 return -1;
             }
-            Node node = map.get(key);
-            list.remove(node);
-            list.addFirst(node);
-            return node.value;
+            return updatePosition(key);
+        }
+
+        private int updatePosition(int key) {
+            var nodeIter = map.get(key);
+            Node val = nodeIter.next();
+            nodeIter.remove();
+            addToEnd(key, val);
+            return val.value;
         }
 
         public void put(int key, int value) {
             if (map.containsKey(key)) {
-                Node node = map.get(key);
-                list.remove(node);
-                Node item = new Node(key, value);
-                list.addFirst(item);
-                map.put(key, item);
+                updatePosition(key);
                 return;
             }
-            if (list.size() == this.capacity) {
-                Node node = list.removeLast();
+            if (list.size() >= this.capacity) {
+                Node node = list.removeFirst();
                 map.remove(node.key);
             }
             Node item = new Node(key, value);
-            list.addFirst(item);
-            map.put(key, item);
+            addToEnd(key, item);
+        }
+
+        private void addToEnd(int key, Node item) {
+            list.addLast(item);
+            Iterator<Node> c = list.descendingIterator();
+            map.put(key, c);
         }
 
         public void print() {
-            for (Map.Entry<Integer, Node> entry : map.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue().value);
-            }
             for (Node node : list) {
                 System.out.print(node.key + " -> " + node.value + " ");
             }
@@ -72,7 +72,7 @@ public class LRU5 {
         }
     }
 
-    public static void main(String[] args) throws java.lang.Exception {
+    public static void main(String[] args) throws Exception {
         // your code goes here
         LRUCache lrucache = new LRUCache(4);
         lrucache.put(1, 1);
