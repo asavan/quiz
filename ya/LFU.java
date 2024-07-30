@@ -3,6 +3,11 @@ package ya;
 import java.util.HashMap;
 import java.util.Map;
 
+// http://dhruvbird.com/lfu.pdf
+// https://leetcode.com/problems/lfu-cache/solutions/94547/java-o-1-solution-using-two-hashmap-and-one-doublelinkedlist/
+
+
+
 public class LFU {
     static class Node {
         private int freq;
