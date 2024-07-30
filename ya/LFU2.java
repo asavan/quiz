@@ -40,14 +40,12 @@ public class LFU2 {
 
     static class DLList<K, V> {
         private final Node<K, V> head;
-        private final Node<K, V> tail;
         private int size;
 
         public DLList() {
-            head = new Node<K, V>();
-            tail = new Node<K, V>();
-            head.next = tail;
-            tail.prev = head;
+            head = new Node<>();
+            head.next = head;
+            head.prev = head;
         }
 
         void addFirst(Node<K, V> n) {
@@ -64,7 +62,7 @@ public class LFU2 {
             --size;
         }
         Node<K, V> removeLast() {
-            Node<K, V> last = tail.prev;
+            Node<K, V> last = head.prev;
             delete(last);
             return last;
         }
@@ -115,8 +113,8 @@ public class LFU2 {
                 map.remove(old.key);
             }
             var newNode = new Node<>(k, v);
-            minFreq = 1;
-            freqMap.computeIfAbsent(minFreq, _k -> new DLList<>()).addFirst(newNode);
+            minFreq = newNode.getFreq();
+            freqMap.computeIfAbsent(newNode.getFreq(), _k -> new DLList<>()).addFirst(newNode);
             map.put(k, newNode);
         }
 
