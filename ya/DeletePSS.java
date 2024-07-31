@@ -47,6 +47,7 @@ public class DeletePSS {
     public void test() {
         assertEquals("abc", remove("ab()c"));
         assertEquals("ab(a)", remove("ab(()a)"));
+        assertEquals("aba)", remove("aba)"));
         assertEquals("", remove("(((())))"));
         assertEquals("", remove("(()())"));
         assertEquals("(((", remove("(()(("));
