@@ -46,8 +46,8 @@ class NewIterator<T> {
   ["bat"]
 ] */
 
-    private static Collection<List<String>> anagrams(List<String> strs) {
-        Map<Print, List<String>> map = new LinkedHashMap<>();
+    private static Collection<Collection<String>> anagrams(List<String> strs) {
+        Map<Print, Collection<String>> map = new LinkedHashMap<>();
         for (String str : strs) {
             Print p = new Print(str);
             map.computeIfAbsent(p, k -> new ArrayList<>()).add(str);
@@ -93,7 +93,7 @@ class NewIterator<T> {
 
     public static void main(String[] str) {
         String[] testArr = {"eat", "tea", "tan", "ate", "nat", "bat"};
-        Collection<List<String>> lists = NewIterator.anagrams(Arrays.asList(testArr));
+        Collection<Collection<String>> lists = NewIterator.anagrams(Arrays.asList(testArr));
         System.out.print(lists);
     }
 }
