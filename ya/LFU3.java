@@ -3,18 +3,13 @@ package ya;
 import java.util.HashMap;
 import java.util.Map;
 
-// https://leetcode.com/problems/lfu-cache/submissions/1338653967/
-
-public class LFU2 {
-    static class ListNode {
-        public ListNode next;
-        public ListNode prev;
-    }
-
-    static class Node<K, V> extends ListNode {
+public class LFU3 {
+    class Node<K, V> {
         private int freq;
         public final K key;
         private V value;
+        public Node<K, V> next;
+        public Node<K, V> prev;
 
         public Node() {
             this(null, null);
@@ -41,43 +36,40 @@ public class LFU2 {
         }
     }
 
-    static class DLList {
-        private final ListNode head;
-        private int size;
-
+    class DLList<K, V> {
+        private final Node<K, V> head;
         public DLList() {
-            head = new Node<>();
+            head = new Node<K, V>();
             head.next = head;
             head.prev = head;
         }
 
-        void addFirst(ListNode n) {
+        void addFirst(Node<K, V> n) {
             n.next = head.next;
             n.prev = head;
             n.next.prev = n;
             head.next = n;
-            ++size;
         }
-        void delete(ListNode n) {
+        void delete(Node<K, V> n) {
             n.next.prev = n.prev;
             n.prev.next = n.next;
             n.prev = n.next = null;
-            --size;
         }
-        ListNode removeLast() {
-            var last = head.prev;
+
+        Node<K, V> removeLast() {
+            Node<K, V> last = head.prev;
             delete(last);
             return last;
         }
 
         public boolean isEmpty() {
-            return size == 0;
+            return head == head.next;
         }
     }
 
-    static class LFUCache {
+    class LFUCache {
         private final Map<Integer, Node<Integer, Integer>> map;
-        private final Map<Integer, DLList> freqMap;
+        private final Map<Integer, DLList<Integer, Integer>> freqMap;
         private int minFreq;
         private final int capacity;
 
@@ -109,15 +101,15 @@ public class LFU2 {
             }
             if (capacity == map.size()) {
                 var list = freqMap.get(minFreq);
-                var old = (Node<Integer, Integer>) list.removeLast();
+                var old = list.removeLast();
                 if (list.isEmpty() && old.getFreq() != 1) {
                     freqMap.remove(old.getFreq());
                 }
                 map.remove(old.key);
             }
             var newNode = new Node<>(k, v);
-            minFreq = newNode.getFreq();
-            freqMap.computeIfAbsent(newNode.getFreq(), _k -> new DLList()).addFirst(newNode);
+            minFreq = 1;
+            freqMap.computeIfAbsent(minFreq, _k -> new DLList<>()).addFirst(newNode);
             map.put(k, newNode);
         }
 
@@ -131,7 +123,7 @@ public class LFU2 {
                 freqMap.remove(n.getFreq());
             }
             n.increaseFreq();
-            freqMap.computeIfAbsent(n.getFreq(), _k -> new DLList()).addFirst(n);
+            freqMap.computeIfAbsent(n.getFreq(), _k -> new DLList<>()).addFirst(n);
         }
 
         public void print() {
@@ -141,20 +133,5 @@ public class LFU2 {
             System.out.println();
         }
     }
-    public static void main(String[] args) {
-        var cache = new LFUCache(4);
-        cache.put(1, 1);
-        cache.put(10, 15);
-        cache.put(15, 10);
-        cache.put(10, 16);
-        cache.put(12, 15);
-        cache.put(18, 10);
-        cache.put(13, 16);
 
-        System.out.println(cache.get(1));
-        System.out.println(cache.get(10));
-        System.out.println(cache.get(15));
-        cache.print();
-
-    }
 }
