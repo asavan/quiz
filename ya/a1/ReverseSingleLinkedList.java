@@ -4,8 +4,8 @@ package ya.a1;
  * Created by asavan on 05.02.2021.
  */
 public class ReverseSingleLinkedList {
-    static class Node {
-        public int value;
+    public static class Node {
+        public final int value;
         public Node next;
 
         public Node(int value, Node next) {
@@ -22,8 +22,7 @@ public class ReverseSingleLinkedList {
         print(reversed);
     }
 
-    public static Node reverseList(Node node) {
-        Node current = node;
+    public static Node reverseList(Node current) {
         Node prev = null;
         while (current != null) {
             Node next = current.next;
@@ -39,6 +38,6 @@ public class ReverseSingleLinkedList {
             System.out.print(node.value + " ");
             node = node.next;
         }
-        System.out.println("");
+        System.out.println();
     }
 }
