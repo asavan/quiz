@@ -11,8 +11,51 @@ public class DeletePSS {
 
     private static String remove(String s) {
         var arr = s.toCharArray();
-        int newLen = removeInner(arr);
+        int newLen = removeInner3(arr);
         return new String(arr, 0, newLen);
+    }
+
+    private static int removeInner2(char[] charArray) {
+        int writeInd = 0;
+        int openLen = 0;
+        for (var c: charArray) {
+            if (c == '(') {
+                ++openLen;
+                charArray[writeInd++] = c;
+            } else if (c == ')') {
+                if (openLen > 0) {
+                    --openLen;
+                    --writeInd;
+                } else {
+                    charArray[writeInd++] = c;
+                }
+            } else {
+                openLen = 0;
+                charArray[writeInd++] = c;
+            }
+        }
+        return writeInd;
+    }
+
+    private static int removeInner3(char[] charArray) {
+        int writeInd = 0;
+        int openLen = 0;
+        for (var c: charArray) {
+            charArray[writeInd++] = c;
+            openLen = switch (c) {
+                case '(' -> openLen + 1;
+                case ')' -> {
+                    if (openLen > 0) {
+                        writeInd -= 2;
+                        yield openLen - 1;
+                    } else {
+                        yield 0;
+                    }
+                }
+                default -> 0;
+            };
+        }
+        return writeInd;
     }
 
     private static int removeInner(char[] charArray) {
