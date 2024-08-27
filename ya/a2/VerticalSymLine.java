@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by asavan on 05.02.2021.
@@ -64,19 +63,19 @@ public class VerticalSymLine {
 
     private static boolean hasVerticalSymLine(Point[] points) {
         Map<Point, Integer> allPoints = new HashMap<>();
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
+        long minX = Integer.MAX_VALUE;
+        long maxX = Integer.MIN_VALUE;
         for (Point point : points) {
             allPoints.merge(new Point(point.x * 2, point.y), 1, Integer::sum);
             minX = Math.min(minX, point.x * 2);
             maxX = Math.max(maxX, point.x * 2);
         }
-        int mid = (maxX + minX)/2;
+        long mid = (maxX + minX)/2;
         for (Point point : points) {
             if (point.x*2 == mid) {
                 continue;
             }
-            Point key = new Point(2 * mid - point.x*2, point.y);
+            Point key = new Point((int)(2 * mid - point.x*2), point.y);
             Integer symPoint = allPoints.get(key);
             if (symPoint == null || symPoint.equals(0)) {
                 return false;
@@ -85,6 +84,18 @@ public class VerticalSymLine {
             }
         }
         return true;
+    }
+
+    @Test
+    public void test2() {
+        int m1 = 0x7ffffff0;
+        int m2 = 0x7ffffff2;
+        int mid = m1 + (m2 - m1) / 2;
+        int mid2 = (m1 + m2) / 2;
+        long mid3 = ((long)m1 + m2) / 2;
+        System.out.println(mid2);
+        assertEquals(0x7ffffff1, mid);
+        assertEquals(mid3, mid);
     }
 
     @Test
