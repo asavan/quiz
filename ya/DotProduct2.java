@@ -42,9 +42,9 @@ public class DotProduct2 {
             curCount = curr.count;
             curValue = curr.value;
         }
-        boolean next(int diff) {
+        public boolean next(int diff) {
             curCount -= diff;
-            while (curCount == 0) {
+            while (curCount <= 0) {
                 ++ind;
                 if (ind >= l.size()) {
                     return false;

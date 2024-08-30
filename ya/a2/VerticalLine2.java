@@ -3,48 +3,28 @@ package ya.a2;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class VerticalLine2 {
-    static class Point {
-        public int x, y;
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
+    public record Point(int x, int y) {}
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Point other)) return false;
-            return x == other.x && y == other.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
-        }
-    }
-
-    private static boolean hasVerticalSymLine(Point[] points) {
+    public static boolean hasVerticalSymLine(Point[] points) {
         if (points.length == 0) {
             return true;
         }
 
-        var map = Arrays.stream(points).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        var min = Arrays.stream(points).mapToInt(p -> p.x).min().getAsInt();
-        var max = Arrays.stream(points).mapToInt(p -> p.x).max().getAsInt();
+        var map = Arrays.stream(points).collect(groupingBy(identity(), counting()));
+        var min = Arrays.stream(points).mapToInt(Point::x).min().getAsInt();
+        var max = Arrays.stream(points).mapToInt(Point::x).max().getAsInt();
 
-        int mid2 = min + max;
+        long mid2 = (long)min + max;
         for (var p: points) {
-            var keySim = new Point(mid2 - p.x, p.y);
+            var keySim = new Point((int)(mid2 - p.x()), p.y());
             var countSim = map.get(keySim);
             if (!map.get(p).equals(countSim)) {
                 return false;
