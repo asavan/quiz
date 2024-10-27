@@ -1,10 +1,10 @@
 package meta.i18n;
 
 public class PatternMatcher {
-    interface Matcher {
+    sealed interface Matcher permits IntMatcher, LetterMatcher{
         int skip(String s, int from);
     }
-    static class IntMatcher implements Matcher {
+    static final class IntMatcher implements Matcher {
         public IntMatcher(int n) {
             this.n = n;
         }
@@ -17,7 +17,7 @@ public class PatternMatcher {
         }
         private final int n;
     }
-    static class LetterMatcher implements Matcher {
+    static final class LetterMatcher implements Matcher {
         private final char c;
 
         public LetterMatcher(char c) {
