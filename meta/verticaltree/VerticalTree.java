@@ -1,26 +1,34 @@
 package meta.verticaltree;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class VerticalTree {
-    static class Node {
+    public static class Node {
+        public Node(int v, Node l, Node r) {
+            val = v;
+            left = l;
+            right = r;
+        }
         public Node left, right;
         public int val;
     }
-    record Dim(int left, int right){
+    record Dim(int left, int right) {
         public int size() {
             return right - left + 1;
         }
     }
 
+    private record Item(Node n, int ind) {}
     public static void printTree(Node root) {
         Dim d = traverse(root, new Dim(0, 0));
         List<List<Integer>> result = new ArrayList<>(d.size());
         for (int i = 0; i < d.size(); ++i) {
             result.add(new ArrayList<>());
         }
-        traverseFill(result, d, 0, root);
+        traverseFill(result, d, root);
         printResult(result);
     }
 
@@ -33,13 +41,22 @@ public class VerticalTree {
         }
     }
 
-    private static void traverseFill(List<List<Integer>> result, Dim d, int curX, Node root) {
+    private static void traverseFill(List<List<Integer>> result, Dim d, Node root) {
         if (root == null) {
             return;
         }
-        result.get(curX - d.left).add(root.val);
-        traverseFill(result, d, curX - 1, root.left);
-        traverseFill(result, d, curX + 1, root.right);
+        Queue<Item> q = new ArrayDeque<>();
+        q.add(new Item(root, - d.left));
+
+        while (!q.isEmpty()) {
+            Item item = q.poll();
+            if (item.n == null) {
+                continue;
+            }
+            result.get(item.ind).add(item.n.val);
+            q.add(new Item(item.n.left, item.ind - 1));
+            q.add(new Item(item.n.right, item.ind + 1));
+        }
     }
 
     private static Dim traverse(Node root, Dim cur) {
