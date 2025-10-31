@@ -227,31 +227,11 @@ const WIN = 1;
 const LOOSE = -1;
 const DRAW = 0;
 
-function getWinner(hand1, hand2) {
-    const power1 = handToPower(hand1);
-    const power2 = handToPower(hand2);
-    if (power1.power > power2.power) {
-        return WIN;
-    }
-    if (power1.power < power2.power) {
-        return LOOSE;
-    }
-    if (power1.hi > power2.hi) {
-        return WIN;
-    }
-    if (power1.hi < power2.hi) {
-        return LOOSE;
-    }
-    if (power1.low > power2.low) {
-        return WIN;
-    }
-    if (power1.low < power2.low) {
-        return LOOSE;
-    }
-    assertE(power1.rest.length, power2.rest.length);
-    for (let i = 0; i < power1.rest.length; ++i) {
-        const c1 = power1.rest[i];
-        const c2 = power2.rest[i];
+function compareArrays(arr1, arr2) {
+    assertE(arr1.length, arr2.length);
+    for (let i = 0; i < arr2.length; ++i) {
+        const c1 = arr1[i];
+        const c2 = arr2[i];
         if (c1 > c2) {
             return WIN;
         }
@@ -260,6 +240,32 @@ function getWinner(hand1, hand2) {
         }
     }
     return DRAW;
+}
+
+function compareByProps(elem1, elem2, props) {
+    for (const prop of props) {
+        const c1 = elem1[prop];
+        const c2 = elem2[prop];
+        if (c1 > c2) {
+            return WIN;
+        }
+        if (c1 < c2) {
+            return LOOSE;
+        }
+    }
+    return DRAW;
+}
+
+function getWinner(hand1, hand2) {
+    const power1 = handToPower(hand1);
+    const power2 = handToPower(hand2);
+    let result = compareByProps(power1, power2, ["power", "hi", "low"]);
+    if (result !== DRAW) {
+        return result;
+    }
+    assertE(power1.rest.length, power2.rest.length);
+    result = compareArrays(power1.rest, power2.rest);
+    return result;
 }
 
 function getWinnerByStr(str) {
@@ -335,6 +341,8 @@ test("fullData", async ()=> {
         // Perform asynchronous operations with each line
     }
     console.log(lines, count);
+    assert.equal(count, 376);
+    assert.equal(lines, 1000);
 });
 
 /*
@@ -362,5 +370,5 @@ function sumSquares(end) {
 
 test("euler login", () => {
     assert.equal(sumSquares(5), 35);
-    console.log(sumSquares(752000));
+    console.log(sumSquares(752000)); // 70876501333208000 but prints 70876501333021040
 });
