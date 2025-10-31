@@ -340,18 +340,37 @@ The first 5 square numbers are:
 Among the first 752 thousand square numbers, what is the sum of all the odd squares?
  */
 
-function sumSquares(end) {
-    let sum = BigInt("0");
-    for (let i = 1; i <= end; ++i) {
-        if (i % 2 !== 0) {
-            const mult = BigInt(i);
-            sum += mult * mult;
-        }
+function sumOddSquaresNaive(end) {
+    let sum = 0;
+    for (let i = 1; i <= end; i+=2) {
+        sum += i * i;
     }
     return sum;
 }
 
+function sumOddSquares(end) {
+    let sum = BigInt(0);
+    for (let i = 1; i <= end; i+=2) {
+        const mult = BigInt(i);
+        sum += mult * mult;
+    }
+    return sum;
+}
+
+function sumSquares(n) {
+    return n * (n+1) * (2*n+1) / 6;
+}
+
+function sumOddSquaresFast(end) {
+    const half = Math.floor(end/2);
+    const extra = sumSquares(half);
+    return sumSquares(end) - 4 * extra;
+}
+
 test("euler login", () => {
-    assert.equal(sumSquares(5), BigInt(35));
-    assert.equal(sumSquares(752000), BigInt(70876501333208000));
+    assert.equal(sumOddSquares(5), BigInt(35));
+    assert.equal(sumOddSquares(752000), BigInt(70876501333208000));
+    assert.equal(sumOddSquaresFast(5), 35);
+    // first fail at 378077
+    assert.equal(sumOddSquaresFast(752000), 70876501333208000);
 });
