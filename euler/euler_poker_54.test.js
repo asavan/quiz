@@ -275,7 +275,7 @@ function getWinnerByStr(str) {
 
 test("card", () => {
     const card = readCard("AS");
-    assert.equal(card.rank, 14);
+    assert.equal(card.rank, ASE_RANK);
     assert.equal(card.suit, 2);
 });
 
