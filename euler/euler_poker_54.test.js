@@ -41,7 +41,7 @@ function readCard(str) {
 function readHand(str, from, to) {
     const cards = [];
     for (let i = from; i < to; i += 3) {
-        const cardStr = str.substring(i, i+2);
+        const cardStr = str.substring(i, i + 2);
         const card = readCard(cardStr);
         cards.push(card);
     }
@@ -65,7 +65,7 @@ function getStraight(cards) {
     }
     for (let i = startIndex; i < 5; ++i) {
         const cur = cards[i];
-        const prev = cards[i-1];
+        const prev = cards[i - 1];
         if (cur !== prev - 1) {
             return 0;
         }
@@ -92,11 +92,92 @@ function handToPower(cards) {
             arr.push(card.suit);
         }
     }
+
+    if (mapRanks.size === 2) {
+        let hi = 0;
+        let low = 0;
+        let biggest = 0;
+        for (const [key, value] of mapRanks.entries()) {
+            if (value.length >= 3) {
+                biggest = value.length;
+                hi = key;
+            }
+            if (value.length <= 2) {
+                low = key;
+            }
+        }
+        let power = 0;
+        if (biggest === 4) {
+            power = POWER_FOUR;
+        }
+        if (biggest === 3) {
+            power = POWER_FULL_HOUSE;
+        }
+        assertT(power > 0);
+        return {
+            power,
+            hi,
+            low
+        };
+    }
+    if (mapRanks.size === 3) {
+        let hi = 0;
+        let low = 0;
+        let power = POWER_TWO_PAIRS;
+        let lows = [];
+        const rest = [];
+        for (const [key, value] of mapRanks.entries()) {
+            if (value.length === 3) {
+                power = POWER_TREE;
+                hi = key;
+            } else if (value.length === 2) {
+                lows.push(key);
+            } else if (value.length === 1) {
+                rest.push(key);
+            } else {
+                assertT(false);
+            }
+        }
+        if (hi) {
+            assertE(lows.length, 0);
+            low = hi;
+        } else {
+            assertE(lows.length, 2);
+            hi = Math.max(lows[0], lows[1]);
+            low = Math.min(lows[0], lows[1]);
+        }
+        rest.sort((a, b) => b - a);
+
+        return {
+            power,
+            hi,
+            low,
+            rest
+        };
+    }
+    if (mapRanks.size === 4) {
+        let hi = 0;
+        const rest = [];
+        for (const [key, value] of mapRanks.entries()) {
+            if (value.length === 2) {
+                hi = key;
+            } else if (value.length === 1) {
+                rest.push(key);
+            } else {
+                assertT(false);
+            }
+        }
+        rest.sort((a, b) => b - a);
+        return {
+            power: POWER_PAIR,
+            hi,
+            low: hi,
+            rest
+        };
+    }
     if (mapRanks.size === 5) {
-        cards.sort((c1, c2) => {
-            return c2.rank - c1.rank;
-        });
-        const cardRanks = cards.map(c => c.rank);
+        const cardRanks = [...mapRanks.keys()];
+        cardRanks.sort((a, b) => b - a);
         const strHi = getStraight(cardRanks);
         const suits = cards.map(c => c.suit);
         const hasFlush = getFlush(suits);
@@ -128,98 +209,6 @@ function handToPower(cards) {
             rest: cardRanks
         }
     }
-    if (mapRanks.size === 1) {
-        assertT(false);
-        return {
-            power: 0,
-            hi: 0,
-            low: 0,
-            rest: []
-        }
-    }
-    if (mapRanks.size === 2) {
-        let hi = 0;
-        let low = 0;
-        let biggest = 0;
-        for (const [key, value] of mapRanks.entries()) {
-            if (value.length >= 3) {
-                biggest = value.length;
-                hi = key;
-            }
-            if (value.length <= 2) {
-                low = key;
-            }
-        }
-        let power = 0;
-        if (biggest === 4) {
-            power = POWER_FOUR;
-        }
-        if (biggest === 3) {
-            power = POWER_FULL_HOUSE;
-        }
-        assertT(power > 0);
-        return {
-            power,
-            hi,
-            low
-        };
-    }
-    if (mapRanks.size === 4) {
-        let hi = 0;
-        const rest = [];
-        for (const [key, value] of mapRanks.entries()) {
-            if (value.length === 2) {
-                hi = key;
-            } else if (value.length === 1) {
-                rest.push(key);
-            } else {
-                assertT(false);
-            }
-        }
-        rest.sort((a, b) => b-a);
-        return {
-            power: POWER_PAIR,
-            hi,
-            low: hi,
-            rest
-        };
-    }
-    if (mapRanks.size === 3) {
-        let hi = 0;
-        let low = 0;
-        let power = POWER_TWO_PAIRS;
-        let lows = [];
-        const rest = [];
-        for (const [key, value] of mapRanks.entries()) {
-            if (value.length === 3) {
-                power = POWER_TREE;
-                hi = key;
-            } else if (value.length === 2) {
-                lows.push(key);
-            } else if (value.length === 1) {
-                rest.push(key);
-            } else {
-                assertT(false);
-            }
-        }
-        if (hi) {
-            assertE(lows.length, 0);
-            low = hi;
-        } else {
-            assertE(lows.length, 2);
-            hi = Math.max(lows[0], lows[1]);
-            low = Math.min(lows[0], lows[1]);
-        }
-        rest.sort((a, b) => b-a);
-
-        return {
-            power,
-            hi,
-            low,
-            rest
-        };
-    }
-
     assertT(false);
 }
 
@@ -256,9 +245,7 @@ function compareByProps(elem1, elem2, props) {
     return DRAW;
 }
 
-function getWinner(hand1, hand2) {
-    const power1 = handToPower(hand1);
-    const power2 = handToPower(hand2);
+function getWinner(power1, power2) {
     let result = compareByProps(power1, power2, ["power", "hi", "low"]);
     if (result !== DRAW) {
         return result;
@@ -271,7 +258,7 @@ function getWinner(hand1, hand2) {
 function getWinnerByStr(str) {
     const hand1 = readHand(str, 0, 14);
     const hand2 = readHand(str, 15, str.length);
-    let result = getWinner(hand1, hand2);
+    let result = getWinner(handToPower(hand1), handToPower(hand2));
     assertT(result !== DRAW);
     if (result === LOOSE) {
         result = 0;
@@ -323,7 +310,7 @@ test("power", () => {
     assert.equal(power.low, 6);
 });
 
-test("fullData", async ()=> {
+test("fullData", async () => {
     const fileStream = fs.createReadStream('./0054_poker.txt');
     const rl = readline.createInterface({
         input: fileStream,
@@ -332,10 +319,6 @@ test("fullData", async ()=> {
     let count = 0;
     let lines = 0;
     for await (const line of rl) {
-        if (line.length === 0) {
-            console.log("Empty line");
-            continue;
-        }
         ++lines;
         count += getWinnerByStr(line);
         // Perform asynchronous operations with each line
@@ -362,7 +345,7 @@ function sumSquares(end) {
     let sum = 0;
     for (let i = 1; i <= end; ++i) {
         if (i % 2 !== 0) {
-            sum += i*i;
+            sum += i * i;
         }
     }
     return sum;
