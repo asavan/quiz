@@ -323,7 +323,6 @@ test("fullData", async () => {
         count += getWinnerByStr(line);
         // Perform asynchronous operations with each line
     }
-    console.log(lines, count);
     assert.equal(count, 376);
     assert.equal(lines, 1000);
 });
@@ -342,16 +341,17 @@ Among the first 752 thousand square numbers, what is the sum of all the odd squa
  */
 
 function sumSquares(end) {
-    let sum = 0;
+    let sum = BigInt("0");
     for (let i = 1; i <= end; ++i) {
         if (i % 2 !== 0) {
-            sum += i * i;
+            const mult = BigInt(i);
+            sum += mult * mult;
         }
     }
     return sum;
 }
 
 test("euler login", () => {
-    assert.equal(sumSquares(5), 35);
-    console.log(sumSquares(752000)); // 70876501333208000 but prints 70876501333021040
+    assert.equal(sumSquares(5), BigInt(35));
+    assert.equal(sumSquares(752000), BigInt(70876501333208000));
 });
